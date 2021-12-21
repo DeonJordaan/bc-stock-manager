@@ -1,9 +1,15 @@
-import React, { useContext } from 'react';
+import React, { useContext, useRef } from 'react';
 
 import ProductContext from '../store/product-context';
 
-const AddStock = () => {
-	// const productCtx = useContext(ProductContext);
+const AddStock = (props) => {
+	const [productName, setProductName] = useState();
+	const [productQuantity, setProductQuantity] = useState();
+	const [productAmount, setProductAmount] = useState();
+
+	const selectDropdownHandler = (event) => {
+		props.onProductSelection(event.target.value);
+	};
 
 	return (
 		<section className="add-stock display">
@@ -15,6 +21,8 @@ const AddStock = () => {
 						name="product-code"
 						id="product-code"
 						className="select-product"
+						value={props.selected}
+						onChange={selectDropdownHandler}
 					>
 						<option value="Select">--Select--</option>
 						<option value="product1">Product 1</option>
@@ -38,7 +46,8 @@ const AddStock = () => {
 						id="item-price"
 					/>
 				</div>
-				<button onClick={productCtx.fetchProductsHandler} type="button">
+				<button type="button">
+					{/* <button onClick={productCtx.fetchProductsHandler} type="button"> */}
 					Add Stock
 				</button>
 			</form>

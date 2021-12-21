@@ -1,14 +1,16 @@
-const StockItem = () => {
+import React from 'react';
+
+const StockItem = (props) => {
 	return (
-		<section class="stock-item product">
-			<li class="product__01">
-				<div class="product__01--group">
-					<div class="product__01--label">PRODUCT01</div>
-					<div class="product__01--average-price">23.99</div>
+		<li className="product__01">
+			<div className="product__01--group">
+				<div className="product__01--label">{props.product}</div>
+				<div className="product__01--average-price">
+					{props.averagePrice}
 				</div>
-				<div class="product__01--quantity">500</div>
-			</li>
-		</section>
+			</div>
+			<div className="product__01--quantity">{props.quantity}</div>
+		</li>
 	);
 };
 

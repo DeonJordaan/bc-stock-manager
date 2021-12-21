@@ -1,3 +1,4 @@
+import React from 'react';
 import './App.css';
 import AddStock from './components/AddStock';
 import RemoveStock from './components/RemoveStock';

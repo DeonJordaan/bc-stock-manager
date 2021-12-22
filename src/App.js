@@ -5,16 +5,17 @@ import RemoveStock from './components/RemoveStock';
 import StockList from './components/StockList';
 
 function App() {
-	const [chosenProduct, setChosenProduct] = useState();
+	// const [chosenProduct, setChosenProduct] = useState();
 
-	const selectProductHandler = (selectedProduct) => {
-		setChosenProduct(selectedProduct);
-	};
+	// const selectProductHandler = (selectedProduct) => {
+	// 	setChosenProduct(selectedProduct);
+	// };
+
 	return (
 		<div className="App">
 			<AddStock
-				selected={chosenProduct}
-				onProductSelection={selectProductHandler}
+			// selected={chosenProduct}
+			// onProductSelection={selectProductHandler}
 			/>
 			<RemoveStock />
 			<StockList />

@@ -5,10 +5,18 @@ import ProductContext from '../store/product-context';
 const AddStock = (props) => {
 	const [productName, setProductName] = useState();
 	const [productQuantity, setProductQuantity] = useState();
-	const [productAmount, setProductAmount] = useState();
+	const [productPrice, setProductPrice] = useState();
 
 	const selectDropdownHandler = (event) => {
-		props.onProductSelection(event.target.value);
+		setProductName(event.target.value);
+	};
+
+	const quantityReceivedHandler = (event) => {
+		setProductQuantity(event.target.value);
+	};
+
+	const productPriceHandler = (event) => {
+		setProductPrice(event.target.value);
 	};
 
 	return (
@@ -36,6 +44,7 @@ const AddStock = (props) => {
 						type="number"
 						className="items-received"
 						id="items-received"
+						onChange={quantityReceivedHandler}
 					/>
 				</div>
 				<div className="form__item-price">
@@ -44,6 +53,7 @@ const AddStock = (props) => {
 						type="number"
 						className="item-price"
 						id="item-price"
+						onChange={productPriceHandler}
 					/>
 				</div>
 				<button type="button">

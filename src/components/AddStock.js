@@ -1,8 +1,9 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useState } from 'react';
 
 import ProductContext from '../store/product-context';
 
 const AddStock = (props) => {
+	const productCtx = useContext(ProductContext);
 	const [productName, setProductName] = useState();
 	const [productQuantity, setProductQuantity] = useState();
 	const [productPrice, setProductPrice] = useState();
@@ -18,6 +19,20 @@ const AddStock = (props) => {
 	const productPriceHandler = (event) => {
 		setProductPrice(event.target.value);
 	};
+
+	function submitHandler(event) {
+		event.preventDefault();
+
+		// could add validation here...
+
+		const product = {
+			product: productName,
+			quantity: productQuantity,
+			price: productPrice,
+		};
+
+		productCtx.addProductHandler(product);
+	}
 
 	return (
 		<section className="add-stock display">
@@ -56,8 +71,8 @@ const AddStock = (props) => {
 						onChange={productPriceHandler}
 					/>
 				</div>
-				<button type="button">
-					{/* <button onClick={productCtx.fetchProductsHandler} type="button"> */}
+				{/* <button type="button"> */}
+				<button onClick={submitHandler} type="button">
 					Add Stock
 				</button>
 			</form>

@@ -1,13 +1,13 @@
 class Product {
 	constructor(
-		product,
+		productName,
 		description,
 		price,
 		quantity,
 		averagePrice, //maybe not include this hereand only as a method SOMEWHERE?
 		prices
 	) {
-		this.product = product;
+		this.productName = productName;
 		this.description = description;
 		this.price = price;
 		this.quantity = quantity;

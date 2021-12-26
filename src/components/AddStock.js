@@ -2,11 +2,17 @@ import React, { useContext, useState } from 'react';
 
 import ProductContext from '../store/product-context';
 
+import Product from '../classes/Product';
+
+// import useFetch from '../store/useFetch';
+
 const AddStock = (props) => {
 	const productCtx = useContext(ProductContext);
 	const [productName, setProductName] = useState();
 	const [productQuantity, setProductQuantity] = useState();
 	const [productPrice, setProductPrice] = useState();
+
+	let product = {};
 
 	const selectDropdownHandler = (event) => {
 		setProductName(event.target.value);
@@ -25,14 +31,54 @@ const AddStock = (props) => {
 
 		// could add validation here...
 
-		const product = {
-			product: productName,
+		product = {
+			name: productName.toUpperCase(),
 			quantity: productQuantity,
 			price: productPrice,
 		};
 
-		productCtx.addProductHandler(product);
+		addProductHandler(product);
 	}
+
+	//NOTE ADD PRODUCTS FUNCTION
+
+	let addedProduct = {};
+
+	const addProductHandler = async (product) => {
+		const thisProduct = productCtx.products.find(
+			(element) => element.productName === product.name
+		);
+		console.log(thisProduct);
+		const [thisProductPrices] = thisProduct.prices;
+		const newPrices = thisProductPrices.push(product.price);
+		const newAveragePrice = thisProduct.prices.reduce(
+			(sum, price) => sum + price,
+			0
+		);
+		const newQuantity = thisProduct.quantity - product.quantity;
+
+		addedProduct = new Product(
+			product.productName,
+			product.price,
+			newQuantity,
+			newPrices,
+			newAveragePrice
+		);
+		console.log(addedProduct);
+
+		const response = await fetch(
+			'https://stock-manager-fa27c-default-rtdb.europe-west1.firebasedatabase.app/products.json',
+			{
+				method: 'POST',
+				body: JSON.stringify(addedProduct),
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			}
+		);
+		const data = await response.json();
+		console.log(data);
+	};
 
 	return (
 		<section className="add-stock display">
@@ -48,9 +94,9 @@ const AddStock = (props) => {
 						onChange={selectDropdownHandler}
 					>
 						<option value="Select">--Select--</option>
-						<option value="product1">Product 1</option>
-						<option value="product2">Product 2</option>
-						<option value="product3">Product 3</option>
+						<option value="product01">Product 1</option>
+						<option value="product02">Product 2</option>
+						<option value="product03">Product 3</option>
 					</select>
 				</div>
 				<div className="form__items">
@@ -81,3 +127,8 @@ const AddStock = (props) => {
 };
 
 export default AddStock;
+
+//TODO ADD QUANTITY TO CURRENT PRODUCT
+//TODO ADD THE LATEST PRICE TO THE PRICES ARRAY
+//TODO RECALCULATE AVERAGE PRICE WHEN NEW PRODUCT ADDED
+//FIXME DO I NEED TO MAKE A FETCH REQUEST EVERY TIME THE ITEM GETS ADDED AND THE ABOVE TODO'S ARE CALCULATED? CAN IT BE DONE IN THE SAME REQUEST?

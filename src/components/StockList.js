@@ -62,7 +62,7 @@ const StockList = () => {
 			<ul id="stock-list">
 				{productCtx.products.map((product) => (
 					<StockItem
-						product={product.product}
+						name={product.productName}
 						quantity={product.quantity}
 						averagePrice={product.averagePrice}
 					/>
@@ -78,6 +78,7 @@ const StockList = () => {
 	if (productCtx.isLoading) {
 		stockContent = <p>Loading...</p>;
 	}
+	console.log(productCtx.products);
 
 	return (
 		<section className="stock-levels display product">

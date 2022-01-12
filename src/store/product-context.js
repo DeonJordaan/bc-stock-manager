@@ -37,6 +37,7 @@ export const ProductContextProvider = (props) => {
 			}
 
 			setProducts(loadedProducts);
+			console.log(loadedProducts);
 		};
 
 		fetchProducts(

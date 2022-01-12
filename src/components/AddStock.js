@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 
 import ProductContext from '../store/product-context';
 
-import Product from '../classes/Product';
+// import Product from '../classes/Product';
 
 // import useFetch from '../store/useFetch';
 
@@ -48,29 +48,48 @@ const AddStock = (props) => {
 		const thisProduct = productCtx.products.find(
 			(element) => element.productName === product.name
 		);
-		console.log(thisProduct);
-		const [thisProductPrices] = thisProduct.prices;
-		const newPrices = thisProductPrices.push(product.price);
-		const newAveragePrice = thisProduct.prices.reduce(
-			(sum, price) => sum + price,
+		const price = product.price;
+		// console.log(thisProduct);
+		const thisProductPrices = thisProduct.prices;
+		// console.log(thisProductPrices);
+		const newPrices = thisProductPrices.push(price);
+		// console.log(thisProductPrices, 'two');
+		// console.log(newPrices);
+		const sumOfPrices = thisProduct.prices.reduce(
+			(sum, price) => sum + +price,
 			0
 		);
-		const newQuantity = thisProduct.quantity - product.quantity;
+		// console.log(sumOfPrices);
+		const newAveragePrice = sumOfPrices / newPrices;
+		// console.log(newAveragePrice);
+		const newQuantity = thisProduct.quantity + +product.quantity;
+		// console.log(newQuantity);
+		const productKey = thisProduct.id;
+		console.log(productKey);
 
-		addedProduct = new Product(
-			product.productName,
-			product.price,
-			newQuantity,
-			newPrices,
-			newAveragePrice
-		);
+		addedProduct = {
+			// `${productKey}`: {
+			'-MrDnA7Xqda52V15cW53': {
+				productName: product.name,
+				description: thisProduct.description,
+				price: product.price,
+				quantity: newQuantity,
+				prices: thisProductPrices,
+				averagePrice: newAveragePrice,
+			},
+		};
 		console.log(addedProduct);
 
+		const dbProduct = {
+			path: `/${productKey}`,
+			data: `${addedProduct}`,
+		};
+
 		const response = await fetch(
-			'https://stock-manager-fa27c-default-rtdb.europe-west1.firebasedatabase.app/products.json',
+			`https://stock-manager-fa27c-default-rtdb.europe-west1.firebasedatabase.app/products/.json`,
 			{
 				method: 'POST',
-				body: JSON.stringify(addedProduct),
+				body: JSON.stringify(dbProduct),
 				headers: {
 					'Content-Type': 'application/json',
 				},

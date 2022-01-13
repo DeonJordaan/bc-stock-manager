@@ -1,11 +1,13 @@
+import { ref, onValue } from 'firebase/database';
 import React, { useState, useEffect } from 'react';
+import database from './firebase.js';
 
-import useFetch from './useFetch.js';
+// import useFetch from './useFetch.js';
 
 const ProductContext = React.createContext({
 	products: [],
-	isLoading: false,
-	error: null,
+	// isLoading: false,
+	// error: null,
 	// fetchProductsHandler: () => {},
 	// addProductHandler: () => {},
 });
@@ -16,17 +18,18 @@ export const ProductContextProvider = (props) => {
 	// const [error, setError] = useState(null);
 
 	//FIXME TRYING USEFETCH HOOK
-	const { isLoading, error, sendRequest: fetchProducts } = useFetch();
+	// const { isLoading, error, sendRequest: fetchProducts } = useFetch();
 
 	useEffect(() => {
-		const transformData = (productData) => {
-			const products = productData;
+		onValue(ref(database), (snapshot) => {
+			setProducts([]);
+			const products = snapshot.val();
 
 			const loadedProducts = [];
 
 			for (const key in products) {
 				loadedProducts.push({
-					id: key,
+					// id: key,
 					productName: products[key].productName,
 					price: products[key].price,
 					prices: products[key].prices,
@@ -34,26 +37,50 @@ export const ProductContextProvider = (props) => {
 					quantity: products[key].quantity,
 					description: products[key].description,
 				});
+
+				setProducts(loadedProducts);
+				// const data = snapshot.val();
+				// if(data) {
+				// 	Object.values(data).map((product)=>{
+				// 		setProducts(oldProducts)=>[...oldProducts, ]
+				// 	})
 			}
+		});
+		// const transformData = (productData) => {
+		// 	const products = productData;
 
-			setProducts(loadedProducts);
-			console.log(loadedProducts);
-		};
+		// const loadedProducts = [];
 
-		fetchProducts(
-			{
-				url: 'https://stock-manager-fa27c-default-rtdb.europe-west1.firebasedatabase.app/products.json',
-			},
-			transformData
-		);
-	}, [fetchProducts]);
+		// for (const key in products) {
+		// 	loadedProducts.push({
+		// 		id: key,
+		// 		productName: products[key].productName,
+		// 		price: products[key].price,
+		// 		prices: products[key].prices,
+		// 		averagePrice: products[key].averagePrice,
+		// 		quantity: products[key].quantity,
+		// 		description: products[key].description,
+		// 	});
+		// 	}
+
+		// 	setProducts(loadedProducts);
+		// 	console.log(loadedProducts);
+		// };
+
+		// fetchProducts(
+		// 	{
+		// 		url: 'https://stock-manager-fa27c-default-rtdb.europe-west1.firebasedatabase.app/products.json',
+		// 	},
+		// 	transformData
+		// );
+	}, []);
 
 	return (
 		<ProductContext.Provider
 			value={{
 				products: products,
-				isLoading: isLoading,
-				error: error,
+				// isLoading: isLoading,
+				// error: error,
 				// fetchProductsHandler: fetchProductsHandler,
 				// addProductHandler: addProductHandler,
 			}}

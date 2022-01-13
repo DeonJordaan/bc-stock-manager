@@ -28,6 +28,8 @@ const AddProduct = () => {
 		// 	description: productDescription,
 		// });
 		alert('New product loaded');
+		setNewProductName('');
+		setProductDescription('');
 	}
 
 	return (

@@ -99,13 +99,15 @@ ul {
 	/* // background-color: $bg-color; */
 }
 
-.add-stock {
+.add-stock,
+.add-product {
 	display: flex;
 	/* justify-content: center; */
 	background-color: rgb(243, 241, 241);
 	/* // background-color: $bg-color; */
 }
-.add-stock button {
+.add-stock button,
+.add-product button {
 	background: #0069ed;
 }
 

@@ -3,6 +3,7 @@ import './App.css';
 import AddStock from './components/AddStock';
 import RemoveStock from './components/RemoveStock';
 import StockList from './components/StockList';
+import AddProduct from './components/AddProduct';
 import { ProductContextProvider } from './store/product-context';
 // import ProductContext from './store/product-context';
 
@@ -39,6 +40,7 @@ function App() {
 				/>
 				<RemoveStock />
 				<StockList />
+				<AddProduct />
 			</div>
 		</ProductContextProvider>
 	);

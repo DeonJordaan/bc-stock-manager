@@ -80,23 +80,18 @@ const AddStock = (props) => {
 		};
 		console.log(addedProduct);
 
-		const dbProduct = {
-			path: `/${productKey}`,
-			data: `${addedProduct}`,
-		};
-
-		const response = await fetch(
-			`https://stock-manager-fa27c-default-rtdb.europe-west1.firebasedatabase.app/products/.json`,
-			{
-				method: 'POST',
-				body: JSON.stringify(dbProduct),
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			}
-		);
-		const data = await response.json();
-		console.log(data);
+		// const response = await fetch(
+		// 	`https://stock-manager-fa27c-default-rtdb.europe-west1.firebasedatabase.app/products/.json`,
+		// 	{
+		// 		method: 'POST',
+		// 		body: JSON.stringify(),
+		// 		headers: {
+		// 			'Content-Type': 'application/json',
+		// 		},
+		// 	}
+		// );
+		// const data = await response.json();
+		// console.log(data);
 	};
 
 	return (

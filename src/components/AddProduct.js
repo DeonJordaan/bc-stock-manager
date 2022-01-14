@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { set, ref } from 'firebase/database';
+import { uid } from 'uid';
 
 import database from '../store/firebase.js';
 
@@ -18,15 +19,15 @@ const AddProduct = () => {
 	function submitHandler(event) {
 		event.preventDefault();
 
-		set(ref(database, 'products/' + newProductName), {
+		const uuid = uid();
+
+		set(ref(database, 'products/' + uuid), {
+			key: uuid,
+			id: uuid,
 			productName: newProductName,
 			description: productDescription,
 		});
 
-		// database.ref('products/' + newProductName).set({
-		// 	productName: newProductName,
-		// 	description: productDescription,
-		// });
 		alert('New product loaded');
 		setNewProductName('');
 		setProductDescription('');
@@ -56,7 +57,6 @@ const AddProduct = () => {
 						onChange={productDescriptionHandler}
 					/>
 				</div>
-				{/* <button type="button"> */}
 				<button onClick={submitHandler} type="button">
 					Add Product
 				</button>

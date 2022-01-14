@@ -7,14 +7,19 @@ import ProductContext from '../store/product-context';
 
 const StockList = () => {
 	const productCtx = useContext(ProductContext);
+	console.log(productCtx);
+	console.log(productCtx.products);
+	console.log(productCtx.length);
 
 	let stockContent = <div>No products available</div>;
 
-	if (productCtx.products.length > 0) {
+	// if (productCtx.products.length > 0) {
+	if (productCtx.products) {
 		stockContent = (
 			<ul id="stock-list">
 				{productCtx.products.map((product) => (
 					<StockItem
+						key={product.id}
 						name={product.productName}
 						quantity={product.quantity}
 						averagePrice={product.averagePrice}
@@ -31,13 +36,11 @@ const StockList = () => {
 	if (productCtx.isLoading) {
 		stockContent = <p>Loading...</p>;
 	}
-	console.log(productCtx.products);
 
 	return (
 		<section className="stock-levels display product">
 			<header className="form-header">Where are my Stock Levels?</header>
 			<>{stockContent}</>
-			{/* <StockItem /> */}
 		</section>
 	);
 };

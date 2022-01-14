@@ -41,7 +41,7 @@ export const ProductContextProvider = (props) => {
 			//FIXME CHANGE TRANSFORMATION OF DATA FOR NEW DB FORMAT
 
 			for (const key in loadedProducts) {
-				console.log(key);
+				console.log(loadedProducts[key].productName);
 			}
 			// 	loadedProducts.push({
 			// 		// const product = new Product(

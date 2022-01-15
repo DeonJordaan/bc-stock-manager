@@ -38,7 +38,7 @@ const AddProduct = () => {
 
 	return (
 		<section className="add-product display">
-			<form>
+			<form onSubmit={submitHandler}>
 				<header className="form-header">Add Products</header>
 				<div className="form__items">
 					<label htmlFor="product-name">Product Name</label>
@@ -46,6 +46,7 @@ const AddProduct = () => {
 						type="text"
 						className="product-name"
 						id="product-name"
+						value={newProductName}
 						onChange={productNameHandler}
 					/>
 				</div>
@@ -57,12 +58,11 @@ const AddProduct = () => {
 						type="text"
 						className="product-description"
 						id="product-description"
+						value={productDescription}
 						onChange={productDescriptionHandler}
 					/>
 				</div>
-				<button onClick={submitHandler} type="button">
-					Add Product
-				</button>
+				<button type="button">Add Product</button>
 			</form>
 		</section>
 	);

@@ -1,15 +1,11 @@
 import React, { useContext, useState } from 'react';
 import database from '../store/firebase';
 import { ref, update } from 'firebase/database';
-
 import ProductContext from '../store/product-context';
-
-// import Product from '../classes/Product';
-
-// import useFetch from '../store/useFetch';
 
 const AddStock = (props) => {
 	const productCtx = useContext(ProductContext);
+
 	const [productName, setProductName] = useState();
 	const [productQuantity, setProductQuantity] = useState();
 	const [productPrice, setProductPrice] = useState();
@@ -35,19 +31,23 @@ const AddStock = (props) => {
 
 		product = {
 			name: productName.toUpperCase(),
-			quantity: productQuantity,
+			quantity: +productQuantity,
 			price: +productPrice,
 		};
 
 		addProductHandler(product);
+		setProductName('');
+		setProductQuantity('');
+		setProductPrice('');
 	}
 
-	//NOTE ADD PRODUCTS FUNCTION
-
-	const addProductHandler = async (product) => {
+	// Add Stock function
+	const addProductHandler = (product) => {
+		//Select product to be updated
 		const thisProduct = productCtx.products.find(
 			(element) => element.productName === product.name
 		);
+
 		const price = product.price;
 
 		if (thisProduct.prices) {
@@ -61,17 +61,16 @@ const AddStock = (props) => {
 			0
 		);
 		const newAveragePrice = sumOfPrices / thisProduct.prices.length;
-		const newQuantity = thisProduct.quantity + +product.quantity;
+		const newQuantity = thisProduct.quantity + product.quantity;
 		const productKey = thisProduct.id;
 
-		//TODO
-		// const updateProduct = () => {
+		//Update product in DB
 		update(ref(database, `/products/${productKey}`), {
 			quantity: newQuantity,
 			prices: thisProduct.prices,
-			averagePrice: newAveragePrice,
+			averagePrice: newAveragePrice.toFixed(2),
 		});
-		// };
+
 		alert('New stock added!');
 	};
 
@@ -85,7 +84,7 @@ const AddStock = (props) => {
 						name="product-code"
 						id="product-code"
 						className="select-product"
-						value={props.selected}
+						value={productName}
 						onChange={selectDropdownHandler}
 					>
 						<option value="Select">--Select--</option>
@@ -100,6 +99,7 @@ const AddStock = (props) => {
 						type="number"
 						className="items-received"
 						id="items-received"
+						value={productQuantity}
 						onChange={quantityReceivedHandler}
 					/>
 				</div>
@@ -109,6 +109,7 @@ const AddStock = (props) => {
 						type="number"
 						className="item-price"
 						id="item-price"
+						value={productPrice}
 						onChange={productPriceHandler}
 					/>
 				</div>
@@ -122,21 +123,3 @@ const AddStock = (props) => {
 };
 
 export default AddStock;
-
-//TODO ADD QUANTITY TO CURRENT PRODUCT
-//TODO ADD THE LATEST PRICE TO THE PRICES ARRAY
-//TODO RECALCULATE AVERAGE PRICE WHEN NEW PRODUCT ADDED
-//FIXME DO I NEED TO MAKE A FETCH REQUEST EVERY TIME THE ITEM GETS ADDED AND THE ABOVE TODO'S ARE CALCULATED? CAN IT BE DONE IN THE SAME REQUEST?
-
-// addedProduct = {
-// 	// `${productKey}`: {
-// 	'-MrDnA7Xqda52V15cW53': {
-// 		productName: product.name,
-// 		description: thisProduct.description,
-// 		price: product.price,
-// 		quantity: newQuantity,
-// 		prices: thisProductPrices,
-// 		averagePrice: newAveragePrice,
-// 	},
-// };
-// console.log(addedProduct);

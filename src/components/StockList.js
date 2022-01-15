@@ -1,4 +1,3 @@
-// import React, { useState, useCallback, useEffect } from 'react';
 import React, { useContext } from 'react';
 
 import StockItem from './StockItem';

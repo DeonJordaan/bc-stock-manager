@@ -5,6 +5,7 @@ import RemoveStock from './components/RemoveStock';
 import StockList from './components/StockList';
 import AddProduct from './components/AddProduct';
 import { ProductContextProvider } from './store/product-context';
+import { EmailContextProvider } from './store/email-context';
 // import ProductContext from './store/product-context';
 
 function App() {
@@ -32,16 +33,18 @@ function App() {
 
 	return (
 		<ProductContextProvider>
-			<div className="App">
-				<AddStock
-				// onAddProduct={productCtx.addProductHandler}
-				// selected={chosenProduct}
-				// onProductSelection={selectProductHandler}
-				/>
-				<RemoveStock />
-				<StockList />
-				<AddProduct />
-			</div>
+			<EmailContextProvider>
+				<div className="App">
+					<AddStock
+					// onAddProduct={productCtx.addProductHandler}
+					// selected={chosenProduct}
+					// onProductSelection={selectProductHandler}
+					/>
+					<RemoveStock />
+					<StockList />
+					<AddProduct />
+				</div>
+			</EmailContextProvider>
 		</ProductContextProvider>
 	);
 }

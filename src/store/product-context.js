@@ -1,6 +1,5 @@
 import { ref, onValue } from 'firebase/database';
 import React, { useState, useEffect } from 'react';
-// import Product from '../classes/Product.js';
 import database from './firebase.js';
 
 const ProductContext = React.createContext({

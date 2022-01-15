@@ -1,4 +1,6 @@
 import React, { useContext, useState } from 'react';
+import database from '../store/firebase';
+import { ref, update } from 'firebase/database';
 
 import ProductContext from '../store/product-context';
 
@@ -34,7 +36,7 @@ const AddStock = (props) => {
 		product = {
 			name: productName.toUpperCase(),
 			quantity: productQuantity,
-			price: productPrice,
+			price: +productPrice,
 		};
 
 		addProductHandler(product);
@@ -42,56 +44,35 @@ const AddStock = (props) => {
 
 	//NOTE ADD PRODUCTS FUNCTION
 
-	let addedProduct = {};
-
 	const addProductHandler = async (product) => {
 		const thisProduct = productCtx.products.find(
 			(element) => element.productName === product.name
 		);
 		const price = product.price;
-		// console.log(thisProduct);
-		const thisProductPrices = thisProduct.prices;
-		// console.log(thisProductPrices);
-		const newPrices = thisProductPrices.push(price);
-		// console.log(thisProductPrices, 'two');
-		// console.log(newPrices);
+
+		if (thisProduct.prices) {
+			thisProduct.prices.push(price);
+		} else {
+			thisProduct.prices = [price];
+		}
+
 		const sumOfPrices = thisProduct.prices.reduce(
-			(sum, price) => sum + +price,
+			(sum, price) => sum + price,
 			0
 		);
-		// console.log(sumOfPrices);
-		const newAveragePrice = sumOfPrices / newPrices;
-		// console.log(newAveragePrice);
+		const newAveragePrice = sumOfPrices / thisProduct.prices.length;
 		const newQuantity = thisProduct.quantity + +product.quantity;
-		// console.log(newQuantity);
 		const productKey = thisProduct.id;
-		console.log(productKey);
 
-		addedProduct = {
-			// `${productKey}`: {
-			'-MrDnA7Xqda52V15cW53': {
-				productName: product.name,
-				description: thisProduct.description,
-				price: product.price,
-				quantity: newQuantity,
-				prices: thisProductPrices,
-				averagePrice: newAveragePrice,
-			},
-		};
-		console.log(addedProduct);
-
-		// const response = await fetch(
-		// 	`https://stock-manager-fa27c-default-rtdb.europe-west1.firebasedatabase.app/products/.json`,
-		// 	{
-		// 		method: 'POST',
-		// 		body: JSON.stringify(),
-		// 		headers: {
-		// 			'Content-Type': 'application/json',
-		// 		},
-		// 	}
-		// );
-		// const data = await response.json();
-		// console.log(data);
+		//TODO
+		// const updateProduct = () => {
+		update(ref(database, `/products/${productKey}`), {
+			quantity: newQuantity,
+			prices: thisProduct.prices,
+			averagePrice: newAveragePrice,
+		});
+		// };
+		alert('New stock added!');
 	};
 
 	return (
@@ -146,3 +127,16 @@ export default AddStock;
 //TODO ADD THE LATEST PRICE TO THE PRICES ARRAY
 //TODO RECALCULATE AVERAGE PRICE WHEN NEW PRODUCT ADDED
 //FIXME DO I NEED TO MAKE A FETCH REQUEST EVERY TIME THE ITEM GETS ADDED AND THE ABOVE TODO'S ARE CALCULATED? CAN IT BE DONE IN THE SAME REQUEST?
+
+// addedProduct = {
+// 	// `${productKey}`: {
+// 	'-MrDnA7Xqda52V15cW53': {
+// 		productName: product.name,
+// 		description: thisProduct.description,
+// 		price: product.price,
+// 		quantity: newQuantity,
+// 		prices: thisProductPrices,
+// 		averagePrice: newAveragePrice,
+// 	},
+// };
+// console.log(addedProduct);

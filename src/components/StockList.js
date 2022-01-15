@@ -7,14 +7,10 @@ import ProductContext from '../store/product-context';
 
 const StockList = () => {
 	const productCtx = useContext(ProductContext);
-	console.log(productCtx);
-	console.log(productCtx.products);
-	console.log(productCtx.length);
 
 	let stockContent = <div>No products available</div>;
 
-	// if (productCtx.products.length > 0) {
-	if (productCtx.products) {
+	if (productCtx.products?.length > 0) {
 		stockContent = (
 			<ul id="stock-list">
 				{productCtx.products.map((product) => (
@@ -39,7 +35,7 @@ const StockList = () => {
 
 	return (
 		<section className="stock-levels display product">
-			<header className="form-header">Where are my Stock Levels?</header>
+			<header className="form-header">Stock Levels</header>
 			<>{stockContent}</>
 		</section>
 	);

@@ -26,6 +26,9 @@ const AddProduct = () => {
 			id: uuid,
 			productName: newProductName,
 			description: productDescription,
+			prices: [],
+			averagePrice: 0,
+			quantity: 0,
 		});
 
 		alert('New product loaded');

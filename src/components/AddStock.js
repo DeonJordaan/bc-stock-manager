@@ -1,9 +1,9 @@
 import React, { useContext, useState } from 'react';
-import database from '../store/firebase';
 import { ref, update } from 'firebase/database';
+import database from '../store/firebase';
 import ProductContext from '../store/product-context';
 
-const AddStock = (props) => {
+const AddStock = () => {
 	const productCtx = useContext(ProductContext);
 
 	const [productName, setProductName] = useState();
@@ -76,7 +76,7 @@ const AddStock = (props) => {
 
 	return (
 		<section className="add-stock display">
-			<form>
+			<form onSubmit={submitHandler}>
 				<header className="form-header">Add Stock</header>
 				<div className="form__select-product">
 					<label htmlFor="product-code">Select a Product Code</label>
@@ -84,7 +84,7 @@ const AddStock = (props) => {
 						name="product-code"
 						id="product-code"
 						className="select-product"
-						value={productName}
+						value={productName || ''}
 						onChange={selectDropdownHandler}
 					>
 						<option value="Select">--Select--</option>
@@ -99,7 +99,7 @@ const AddStock = (props) => {
 						type="number"
 						className="items-received"
 						id="items-received"
-						value={productQuantity}
+						value={productQuantity || ''}
 						onChange={quantityReceivedHandler}
 					/>
 				</div>
@@ -109,14 +109,11 @@ const AddStock = (props) => {
 						type="number"
 						className="item-price"
 						id="item-price"
-						value={productPrice}
+						value={productPrice || ''}
 						onChange={productPriceHandler}
 					/>
 				</div>
-				{/* <button type="button"> */}
-				<button onClick={submitHandler} type="button">
-					Add Stock
-				</button>
+				<button type="submit">Add Stock</button>
 			</form>
 		</section>
 	);

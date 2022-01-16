@@ -6,45 +6,18 @@ import StockList from './components/StockList';
 import AddProduct from './components/AddProduct';
 import { ProductContextProvider } from './store/product-context';
 import { EmailContextProvider } from './store/email-context';
-// import ProductContext from './store/product-context';
 
 function App() {
-	// const productCtx = useContext(ProductContext);
-	// const [chosenProduct, setChosenProduct] = useState();
-
-	// const selectProductHandler = (selectedProduct) => {
-	// 	setChosenProduct(selectedProduct);
-	// };
-
-	// async function addProductHandler(product) {
-	// 	const response = await fetch(
-	// 		'https://stock-manager-fa27c-default-rtdb.europe-west1.firebasedatabase.app/products.json',
-	// 		{
-	// 			method: 'POST',
-	// 			body: JSON.stringify(product),
-	// 			headers: {
-	// 				'Content-Type': 'application/json',
-	// 			},
-	// 		}
-	// 	);
-	// 	const data = await response.json();
-	// 	console.log(data);
-	// }
-
 	return (
 		<ProductContextProvider>
-			<EmailContextProvider>
-				<div className="App">
-					<AddStock
-					// onAddProduct={productCtx.addProductHandler}
-					// selected={chosenProduct}
-					// onProductSelection={selectProductHandler}
-					/>
+			<div className="App">
+				<AddStock />
+				<EmailContextProvider>
 					<RemoveStock />
-					<StockList />
-					<AddProduct />
-				</div>
-			</EmailContextProvider>
+				</EmailContextProvider>
+				<StockList />
+				<AddProduct />
+			</div>
 		</ProductContextProvider>
 	);
 }

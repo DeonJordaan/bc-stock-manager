@@ -4,7 +4,6 @@ import database from './firebase.js';
 
 const EmailContext = React.createContext({
 	emails: [],
-	// setEmails: () => {},
 });
 
 export const EmailContextProvider = (props) => {
@@ -17,8 +16,8 @@ export const EmailContextProvider = (props) => {
 
 			const loadedEmails = [];
 
-			if (dbEmails) {
-				dbEmails.emails?.map((item) => {
+			if (dbEmails.emailList) {
+				dbEmails.emailList?.map((item) => {
 					loadedEmails.push(item);
 					return loadedEmails;
 				});
@@ -28,17 +27,10 @@ export const EmailContextProvider = (props) => {
 		});
 	}, []);
 
-	// useEffect(() => {
-	// 	update(ref(database, '/emails'), {
-	// 		emails,
-	// 	});
-	// }, [emails]);
-
 	return (
 		<EmailContext.Provider
 			value={{
 				emails: emails,
-				// setEmails: setEmails,
 			}}
 		>
 			{props.children}

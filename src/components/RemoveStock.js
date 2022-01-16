@@ -1,56 +1,78 @@
+import React, { useContext } from 'react';
 import { update, ref } from 'firebase/database';
-import { useContext, useState } from 'react';
-import EmailContext from '../store/email-context';
 import database from '../store/firebase';
 import ProductContext from '../store/product-context';
+import EmailContext from '../store/email-context';
+import useInput from '../hooks/useInput';
 
 const RemoveStock = () => {
 	const emailCtx = useContext(EmailContext);
 	const productCtx = useContext(ProductContext);
+	const emailList = emailCtx.emails;
 
-	const [productName, setProductName] = useState();
-	const [enteredEmail, setEnteredEmail] = useState();
-	const [itemsPurchased, setItemsPurchased] = useState();
+	const {
+		value: productName,
+		isValid: productNameIsValid,
+		valueChangeHandler: productNameChangeHandler,
+		reset: resetProductNameInput,
+	} = useInput((value) => value.trim() !== '');
+	const {
+		value: enteredEmail,
+		isValid: emailIsValid,
+		hasError: emailHasError,
+		valueChangeHandler: emailChangeHandler,
+		inputBlurHandler: emailBlurHandler,
+		reset: resetEmailInput,
+	} = useInput((value) => value.includes('@'));
+	const {
+		value: enteredQuantity,
+		isValid: quantityIsValid,
+		hasError: quantityHasError,
+		valueChangeHandler: quantityChangeHandler,
+		inputBlurHandler: quantityBlurHandler,
+		reset: resetQuantityInput,
+	} = useInput((value) => parseInt(value, 10) > 0);
+
+	let formIsValid = false;
+
+	if (productNameIsValid && emailIsValid && quantityIsValid) {
+		formIsValid = true;
+	}
 
 	let product = {};
 
-	// Collect user inputs
-	const selectDropdownHandler = (event) => {
-		setProductName(event.target.value);
-	};
-
-	const emailHandler = (event) => {
-		setEnteredEmail(event.target.value);
-	};
-
-	const itemsPurchasedHanlder = (event) => {
-		setItemsPurchased(event.target.value);
-	};
-
 	// Process logic
-	const submitHandler = (event) => {
+	function submitHandler(event) {
 		event.preventDefault();
 
-		// Check if the email has been used
-		if (emailCtx.emails?.includes(enteredEmail)) {
-			// If it has been used, alert the customer and decline the purchase
-			alert('Sorry! Only one purchase per customer allowed');
+		if (!formIsValid) {
+			alert('Please enter a valid input');
 			return;
 		}
-		// If it has not been used, allow the purchase to go ahead and add the email to the DB
-		else {
-			product = {
-				name: productName.toUpperCase(),
-				quantity: +itemsPurchased,
-				email: enteredEmail,
-			};
+
+		product = {
+			name: productName.toUpperCase(),
+			email: enteredEmail,
+			quantity: +enteredQuantity,
+		};
+
+		if (emailCtx.emails?.includes(enteredEmail)) {
+			alert('Sorry! Only one purchase per customer allowed');
+		} else {
+			removeProductHandler(product);
 		}
 
-		removeProductHandler();
-		setProductName('');
-		setEnteredEmail('');
-		setItemsPurchased('');
-	};
+		resetProductNameInput();
+		resetEmailInput();
+		resetQuantityInput();
+	}
+
+	const emailInputClasses = emailHasError
+		? 'form__buyer-email invalid'
+		: 'form__buyer-email';
+	const quantityInputClasses = quantityHasError
+		? 'form__items-bought invalid'
+		: 'form__items-bought';
 
 	// Subtract the items from the database
 	const removeProductHandler = () => {
@@ -58,9 +80,9 @@ const RemoveStock = () => {
 			(element) => element.productName === product.name
 		);
 
+		// eslint-disable-next-line no-unused-vars
 		const updatedEmails = emailCtx.emails.push(enteredEmail);
-		// emailCtx.setEmails(updatedEmails);
-		const updatedQuantity = thisProduct.quantity + product.quantity;
+		const updatedQuantity = thisProduct.quantity - product.quantity;
 		const productKey = thisProduct.id;
 
 		//Update product in DB
@@ -68,8 +90,8 @@ const RemoveStock = () => {
 			quantity: updatedQuantity,
 		});
 
-		update(ref(database, `/emails`), {
-			updatedEmails,
+		update(ref(database, `/`), {
+			emailList,
 		});
 
 		alert('Purchase successfull');
@@ -77,8 +99,7 @@ const RemoveStock = () => {
 
 	return (
 		<section className="remove-stock display">
-			<form>
-				{/* <form onSubmit={submitHandler}> */}
+			<form onSubmit={submitHandler}>
 				<header className="form-header">Remove Stock</header>
 				<div className="form__select-product">
 					<label htmlFor="product-code">Select a Product Code</label>
@@ -86,41 +107,55 @@ const RemoveStock = () => {
 						name="product-code"
 						id="product-code"
 						className="select-product"
-						value={productName}
-						onChange={selectDropdownHandler}
+						value={productName || ''}
+						onChange={productNameChangeHandler}
 					>
 						<option value="Select">--Select--</option>
-						<option value="product1">Product 1</option>
-						<option value="product2">Product 2</option>
-						<option value="product3">Product 3</option>
+						<option value="product01">Product 1</option>
+						<option value="product02">Product 2</option>
+						<option value="product03">Product 3</option>
 					</select>
 				</div>
-				<div className="form__buyer-email">
+				<div className={emailInputClasses}>
 					<label htmlFor="buyer-email">Buyer Email Address</label>
 					<input
 						type="email"
 						className="buyer-email"
 						id="buyer-email"
-						value={enteredEmail}
-						onChange={emailHandler}
+						value={enteredEmail || ''}
+						onBlur={emailBlurHandler}
+						onChange={emailChangeHandler}
 					/>
+					{emailHasError && (
+						<p className="error-text">
+							Please enter a valid email address.
+						</p>
+					)}
 				</div>
-				<div className="form__item-price">
-					<label htmlFor="item-price">Items Bought</label>
+				<div className={quantityInputClasses}>
+					<label htmlFor="items-bought">Items Bought</label>
 					<input
 						type="number"
-						className="item-price"
-						id="item-price"
-						value={itemsPurchased}
-						onChange={itemsPurchasedHanlder}
+						className="items-bought"
+						id="items-bought"
+						value={enteredQuantity || ''}
+						onBlur={quantityBlurHandler}
+						onChange={quantityChangeHandler}
 					/>
+					{quantityHasError && (
+						<p className="error-text">
+							Please enter a valid quantity.
+						</p>
+					)}
 				</div>
-				<button onClick={submitHandler} type="submit">
-					Item Shipped
-				</button>
+				<button type="submit">Item Shipped</button>
 			</form>
 		</section>
 	);
 };
 
 export default RemoveStock;
+
+// Check if the email has been used
+// If it has been used, alert the customer and decline the purchase
+// If it has not been used, allow the purchase to go ahead and add the email to the DB

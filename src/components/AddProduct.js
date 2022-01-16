@@ -46,7 +46,7 @@ const AddProduct = () => {
 						type="text"
 						className="product-name"
 						id="product-name"
-						value={newProductName}
+						value={newProductName || ''}
 						onChange={productNameHandler}
 					/>
 				</div>
@@ -58,11 +58,11 @@ const AddProduct = () => {
 						type="text"
 						className="product-description"
 						id="product-description"
-						value={productDescription}
+						value={productDescription || ''}
 						onChange={productDescriptionHandler}
 					/>
 				</div>
-				<button type="button">Add Product</button>
+				<button type="submit">Add Product</button>
 			</form>
 		</section>
 	);

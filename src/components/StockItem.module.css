@@ -1,0 +1,14 @@
+.product__item {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	padding: 0.25rem 1rem;
+	background-color: #fff;
+	/* hack to prevent double border between list items */
+	box-shadow: 1px 0 0 0 #888, 0 1px 0 0 #888, 1px 1px 0 0 #888,
+		/* Just to fix the corner */ 1px 0 0 0 #888 inset, 0 1px 0 0 #888 inset;
+}
+
+.product__item--label {
+	font-weight: bold;
+}

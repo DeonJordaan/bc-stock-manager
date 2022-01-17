@@ -3,6 +3,7 @@ import { set, ref } from 'firebase/database';
 import { uid } from 'uid';
 import database from '../store/firebase.js';
 import useInput from '../hooks/useInput.js';
+import classes from './AddProduct.module.css';
 
 const AddProduct = () => {
 	const {
@@ -61,7 +62,7 @@ const AddProduct = () => {
 		: 'form__description';
 
 	return (
-		<section className="add-product display">
+		<section className={`${classes['add-product']} ${classes.display}`}>
 			<form onSubmit={submitHandler}>
 				<header className="form-header">Add Products</header>
 				<div className={productNameInputClasses}>
@@ -76,7 +77,7 @@ const AddProduct = () => {
 					/>
 					{productNameHasError && (
 						<p className="error-text">
-							Please enter a valid product name.
+							Please enter a product name.
 						</p>
 					)}
 				</div>
@@ -92,7 +93,7 @@ const AddProduct = () => {
 					/>
 					{descriptionHasError && (
 						<p className="error-text">
-							Please enter a valid product description.
+							Please enter a product description.
 						</p>
 					)}
 				</div>

@@ -1,8 +1,7 @@
 import React, { useContext } from 'react';
-
 import StockItem from './StockItem';
-
 import ProductContext from '../store/product-context';
+import classes from './StockList.module.css';
 
 const StockList = () => {
 	const productCtx = useContext(ProductContext);
@@ -24,18 +23,22 @@ const StockList = () => {
 		);
 	}
 
-	if (productCtx.error) {
-		stockContent = <p>{productCtx.error}</p>;
-	}
+	// if (productCtx.error) {
+	// 	stockContent = <p>{productCtx.error}</p>;
+	// }
 
-	if (productCtx.isLoading) {
-		stockContent = <p>Loading...</p>;
-	}
+	// if (productCtx.isLoading) {
+	// 	stockContent = <p>Loading...</p>;
+	// }
 
 	return (
-		<section className="stock-levels display product">
-			<header className="form-header">Stock Levels</header>
-			<>{stockContent}</>
+		<section
+			className={`${classes['stock-levels']} ${classes.display} ${classes.product}`}
+		>
+			<div className={classes.stocklist}>
+				<header className="form-header">Stock Levels</header>
+				<>{stockContent}</>
+			</div>
 		</section>
 	);
 };

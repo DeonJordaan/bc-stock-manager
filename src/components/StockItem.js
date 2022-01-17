@@ -1,11 +1,14 @@
 import React from 'react';
+import classes from './StockItem.module.css';
 
 const StockItem = (props) => {
 	return (
-		<li className="product__01">
-			<div className="product__01--group">
-				<div className="product__01--label">{props.name}</div>
-				<div className="product__01--average-price">
+		<li className={classes['product__item']}>
+			<div className="product__item--group">
+				<div className={classes['product__item--label']}>
+					{props.name}
+				</div>
+				<div className="product__item--average-price">
 					{props.averagePrice}
 				</div>
 			</div>

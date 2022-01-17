@@ -1,4 +1,4 @@
-import { ref, onValue } from 'firebase/database';
+import { ref, onValue, query, orderByChild } from 'firebase/database';
 import React, { useState, useEffect } from 'react';
 import database from './firebase.js';
 
@@ -24,6 +24,27 @@ export const ProductContextProvider = (props) => {
 			}
 
 			setProducts(loadedProducts);
+		});
+	}, []);
+
+	useEffect(() => {
+		query(ref(database, 'products'), orderByChild('productName')
+		
+		(snapshot) => {
+			setProducts([]);
+			const moreProducts = snapshot.val();
+			console.log(moreProducts);
+
+			// const loadedProducts = [];
+
+			// if (dbProducts) {
+			// 	Object.values(dbProducts.products).map((item) => {
+			// 		loadedProducts.push(item);
+			// 		return loadedProducts;
+			// 	});
+			// }
+
+			// setProducts(loadedProducts);
 		});
 	}, []);
 

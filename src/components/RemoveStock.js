@@ -4,6 +4,8 @@ import database from '../store/firebase';
 import ProductContext from '../store/product-context';
 import EmailContext from '../store/email-context';
 import useInput from '../hooks/useInput';
+import classes from './RemoveStock.module.css';
+import Dropdown from '../UI/Dropdown';
 
 const RemoveStock = () => {
 	const emailCtx = useContext(EmailContext);
@@ -98,23 +100,15 @@ const RemoveStock = () => {
 	};
 
 	return (
-		<section className="remove-stock display">
+		<section className={`${classes['remove-stock']} ${classes.display}`}>
 			<form onSubmit={submitHandler}>
 				<header className="form-header">Remove Stock</header>
 				<div className="form__select-product">
-					<label htmlFor="product-code">Select a Product Code</label>
-					<select
-						name="product-code"
-						id="product-code"
-						className="select-product"
+					<Dropdown
+						name={product}
 						value={productName || ''}
 						onChange={productNameChangeHandler}
-					>
-						<option value="Select">--Select--</option>
-						<option value="product01">Product 1</option>
-						<option value="product02">Product 2</option>
-						<option value="product03">Product 3</option>
-					</select>
+					/>
 				</div>
 				<div className={emailInputClasses}>
 					<label htmlFor="buyer-email">Buyer Email Address</label>
@@ -128,7 +122,7 @@ const RemoveStock = () => {
 					/>
 					{emailHasError && (
 						<p className="error-text">
-							Please enter a valid email address.
+							Please enter an email address.
 						</p>
 					)}
 				</div>
@@ -143,9 +137,7 @@ const RemoveStock = () => {
 						onChange={quantityChangeHandler}
 					/>
 					{quantityHasError && (
-						<p className="error-text">
-							Please enter a valid quantity.
-						</p>
+						<p className="error-text">Please enter a quantity.</p>
 					)}
 				</div>
 				<button type="submit">Item Shipped</button>

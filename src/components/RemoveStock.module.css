@@ -1,0 +1,20 @@
+.remove-stock {
+	display: flex;
+	background-color: rgb(243, 241, 241);
+}
+.remove-stock button {
+	background: rgb(225, 17, 17);
+}
+
+.remove-stock button:hover,
+.remove-stock button:focus {
+	background: rgb(175, 13, 13);
+}
+
+.display {
+	width: 40vw;
+	min-height: 20rem;
+	margin: 2rem auto;
+	padding: 1rem 0;
+	border-radius: 5px;
+}

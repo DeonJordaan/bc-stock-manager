@@ -3,6 +3,8 @@ import { ref, update } from 'firebase/database';
 import database from '../store/firebase';
 import ProductContext from '../store/product-context';
 import useInput from '../hooks/useInput';
+import classes from './AddStock.module.css';
+import Dropdown from '../UI/Dropdown';
 
 const AddStock = () => {
 	const productCtx = useContext(ProductContext);
@@ -100,23 +102,15 @@ const AddStock = () => {
 	};
 
 	return (
-		<section className="add-stock display">
+		<section className={`${classes['add-stock']} ${classes.display}`}>
 			<form onSubmit={submitHandler}>
 				<header className="form-header">Add Stock</header>
 				<div className="form__select-product">
-					<label htmlFor="product-code">Select a Product Code</label>
-					<select
-						name="product-code"
-						id="product-code"
-						className="select-product"
+					<Dropdown
+						name={product}
 						value={productName || ''}
 						onChange={productNameChangeHandler}
-					>
-						<option value="Select">--Select--</option>
-						<option value="product01">Product 1</option>
-						<option value="product02">Product 2</option>
-						<option value="product03">Product 3</option>
-					</select>
+					/>
 				</div>
 				<div className={quantityInputClasses}>
 					<label htmlFor="items-received">Items Received</label>
@@ -129,9 +123,7 @@ const AddStock = () => {
 						onChange={quantityChangeHandler}
 					/>
 					{quantityHasError && (
-						<p className="error-text">
-							Please enter a valid quantity.
-						</p>
+						<p className="error-text">Please enter a quantity.</p>
 					)}
 				</div>
 				<div className={priceInputClasses}>
@@ -145,9 +137,7 @@ const AddStock = () => {
 						onChange={priceChangeHandler}
 					/>
 					{priceHasError && (
-						<p className="error-text">
-							Please enter a valid price.
-						</p>
+						<p className="error-text">Please enter a price.</p>
 					)}
 				</div>
 				<button type="submit">Add Stock</button>

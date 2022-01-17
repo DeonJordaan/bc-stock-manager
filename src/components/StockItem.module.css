@@ -5,8 +5,20 @@
 	padding: 0.25rem 1rem;
 	background-color: #fff;
 	/* hack to prevent double border between list items */
-	box-shadow: 1px 0 0 0 #888, 0 1px 0 0 #888, 1px 1px 0 0 #888,
-		/* Just to fix the corner */ 1px 0 0 0 #888 inset, 0 1px 0 0 #888 inset;
+	box-shadow: 1px 0 0 0 #aaa, 0 1px 0 0 #aaa, 1px 1px 0 0 #aaa,
+		/* Just to fix the corner */ 1px 0 0 0 #aaa inset, 0 1px 0 0 #aaa inset;
+}
+
+/* Set top border of first list item*/
+.product__item:nth-child(1) {
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+}
+
+/* Set bottom border of last list item*/
+.product__item:nth-last-child(1) {
+	border-bottom-left-radius: 3px;
+	border-bottom-right-radius: 3px;
 }
 
 .product__item--label {

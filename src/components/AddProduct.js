@@ -6,6 +6,7 @@ import useInput from '../hooks/useInput.js';
 import classes from './AddProduct.module.css';
 
 const AddProduct = () => {
+	// Gather user input via useInput hook
 	const {
 		value: productName,
 		isValid: productNameIsValid,
@@ -23,12 +24,14 @@ const AddProduct = () => {
 		reset: resetDescriptionInput,
 	} = useInput((value) => value.trim() !== '');
 
+	// Set form validity
 	let formIsValid = false;
 
 	if (productNameIsValid && descriptionIsValid) {
 		formIsValid = true;
 	}
 
+	// Form submit function
 	function submitHandler(event) {
 		event.preventDefault();
 
@@ -39,6 +42,7 @@ const AddProduct = () => {
 
 		const uuid = uid();
 
+		// Add new product to database
 		set(ref(database, 'products/' + uuid), {
 			key: uuid,
 			id: uuid,
@@ -49,11 +53,13 @@ const AddProduct = () => {
 			quantity: 0,
 		});
 
+		// Alert user of success and reset inputs
 		alert('New product loaded');
 		resetProductNameInput('');
 		resetDescriptionInput('');
 	}
 
+	// Set input classes
 	const productNameInputClasses = productNameHasError
 		? 'form__product-name invalid'
 		: 'form__product-name';

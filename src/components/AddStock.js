@@ -7,8 +7,10 @@ import classes from './AddStock.module.css';
 import Dropdown from '../UI/Dropdown';
 
 const AddStock = () => {
+	// Extract context values
 	const productCtx = useContext(ProductContext);
 
+	// Gather user input via useInput hook
 	const {
 		value: productName,
 		isValid: productNameIsValid,
@@ -32,6 +34,7 @@ const AddStock = () => {
 		reset: resetPriceInput,
 	} = useInput((value) => parseInt(value, 10) > 0);
 
+	// Set form validity
 	let formIsValid = false;
 
 	if (productNameIsValid && quantityIsValid && priceIsValid) {
@@ -40,6 +43,7 @@ const AddStock = () => {
 
 	let product = {};
 
+	// Form submit function
 	function submitHandler(event) {
 		event.preventDefault();
 
@@ -48,6 +52,7 @@ const AddStock = () => {
 			return;
 		}
 
+		// Assign gathered inputs to product
 		product = {
 			name: productName.toUpperCase(),
 			quantity: +enteredQuantity,
@@ -56,25 +61,20 @@ const AddStock = () => {
 
 		addProductHandler(product);
 
+		// Reset inputs
 		resetProductNameInput('');
 		resetQuantityInput('');
 		resetPriceInput('');
 	}
 
-	const quantityInputClasses = quantityHasError
-		? 'form__items invalid'
-		: 'form__items';
-	const priceInputClasses = priceHasError
-		? 'form__item-price invalid'
-		: 'form__item-price';
-
 	// Add Stock function
 	const addProductHandler = (product) => {
-		//Select product to be updated
+		// Select product from state
 		const thisProduct = productCtx.products.find(
 			(element) => element.productName === product.name
 		);
 
+		// Update product prices array
 		const price = product.price;
 
 		if (thisProduct.prices) {
@@ -83,23 +83,35 @@ const AddStock = () => {
 			thisProduct.prices = [price];
 		}
 
+		// Calculate average price
 		const sumOfPrices = thisProduct.prices.reduce(
 			(sum, price) => sum + price,
 			0
 		);
 		const newAveragePrice = sumOfPrices / thisProduct.prices.length;
+
+		// Update product quantity
 		const newQuantity = thisProduct.quantity + product.quantity;
 		const productKey = thisProduct.id;
 
-		//Update product in DB
+		// Update product in database
 		update(ref(database, `/products/${productKey}`), {
 			quantity: newQuantity,
 			prices: thisProduct.prices,
 			averagePrice: newAveragePrice.toFixed(2),
 		});
 
+		// Alert user of success
 		alert('New stock added!');
 	};
+
+	// Set input classes
+	const quantityInputClasses = quantityHasError
+		? 'form__items invalid'
+		: 'form__items';
+	const priceInputClasses = priceHasError
+		? 'form__item-price invalid'
+		: 'form__item-price';
 
 	return (
 		<section className={`${classes['add-stock']} ${classes.display}`}>

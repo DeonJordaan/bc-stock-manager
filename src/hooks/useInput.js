@@ -9,14 +9,17 @@ const useInput = (validateValue) => {
 	const valueIsValid = validateValue(enteredValue);
 	const hasError = !valueIsValid && isTouched;
 
+	// Gather entered input value
 	const valueChangeHandler = (event) => {
 		setEnteredValue(event.target.value);
 	};
 
+	// onBlur event sets isTouched state
 	const inputBlurHandler = (event) => {
 		setIsTouched(true);
 	};
 
+	// Reset input and isTouched state
 	const reset = () => {
 		setEnteredValue('');
 		setIsTouched(false);

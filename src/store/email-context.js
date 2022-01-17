@@ -9,6 +9,7 @@ const EmailContext = React.createContext({
 export const EmailContextProvider = (props) => {
 	const [emails, setEmails] = useState([]);
 
+	// Extract emails from database on render
 	useEffect(() => {
 		onValue(ref(database), (snapshot) => {
 			setEmails([]);
@@ -16,6 +17,7 @@ export const EmailContextProvider = (props) => {
 
 			const loadedEmails = [];
 
+			// Push emails to array
 			if (dbEmails.emailList) {
 				dbEmails.emailList?.map((item) => {
 					loadedEmails.push(item);
@@ -23,6 +25,7 @@ export const EmailContextProvider = (props) => {
 				});
 			}
 
+			// Set emails array to state
 			setEmails(loadedEmails);
 		});
 	}, []);

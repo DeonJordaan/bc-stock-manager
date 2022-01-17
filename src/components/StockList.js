@@ -4,10 +4,13 @@ import ProductContext from '../store/product-context';
 import classes from './StockList.module.css';
 
 const StockList = () => {
+	// Extract context values
 	const productCtx = useContext(ProductContext);
 
+	// Set default content
 	let stockContent = <div>No products available</div>;
 
+	// If products are available, render stock item for each product
 	if (productCtx.products?.length > 0) {
 		stockContent = (
 			<ul id="stock-list">
@@ -22,14 +25,6 @@ const StockList = () => {
 			</ul>
 		);
 	}
-
-	// if (productCtx.error) {
-	// 	stockContent = <p>{productCtx.error}</p>;
-	// }
-
-	// if (productCtx.isLoading) {
-	// 	stockContent = <p>Loading...</p>;
-	// }
 
 	return (
 		<section

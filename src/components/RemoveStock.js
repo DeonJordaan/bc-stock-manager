@@ -4,14 +4,16 @@ import database from '../store/firebase';
 import ProductContext from '../store/product-context';
 import EmailContext from '../store/email-context';
 import useInput from '../hooks/useInput';
-import classes from './RemoveStock.module.css';
 import Dropdown from '../UI/Dropdown';
+import classes from './RemoveStock.module.css';
 
 const RemoveStock = () => {
+	// Extract context values
 	const emailCtx = useContext(EmailContext);
 	const productCtx = useContext(ProductContext);
 	const emailList = emailCtx.emails;
 
+	// Gather user input via useInput hook
 	const {
 		value: productName,
 		isValid: productNameIsValid,
@@ -35,6 +37,7 @@ const RemoveStock = () => {
 		reset: resetQuantityInput,
 	} = useInput((value) => parseInt(value, 10) > 0);
 
+	// Set form validity
 	let formIsValid = false;
 
 	if (productNameIsValid && emailIsValid && quantityIsValid) {
@@ -43,7 +46,7 @@ const RemoveStock = () => {
 
 	let product = {};
 
-	// Process logic
+	// Form submit function
 	function submitHandler(event) {
 		event.preventDefault();
 
@@ -52,32 +55,30 @@ const RemoveStock = () => {
 			return;
 		}
 
+		// Assign gathered inputs to product
 		product = {
 			name: productName.toUpperCase(),
 			email: enteredEmail,
 			quantity: +enteredQuantity,
 		};
 
+		// Check if email has been used
 		if (emailCtx.emails?.includes(enteredEmail)) {
 			alert('Sorry! Only one purchase per customer allowed');
 		} else {
+			//If not, continue with purchase
 			removeProductHandler(product);
 		}
 
+		// Reset inputs
 		resetProductNameInput();
 		resetEmailInput();
 		resetQuantityInput();
 	}
 
-	const emailInputClasses = emailHasError
-		? 'form__buyer-email invalid'
-		: 'form__buyer-email';
-	const quantityInputClasses = quantityHasError
-		? 'form__items-bought invalid'
-		: 'form__items-bought';
-
 	// Subtract the items from the database
 	const removeProductHandler = () => {
+		// Select product from state
 		const thisProduct = productCtx.products.find(
 			(element) => element.productName === product.name
 		);
@@ -87,7 +88,7 @@ const RemoveStock = () => {
 		const updatedQuantity = thisProduct.quantity - product.quantity;
 		const productKey = thisProduct.id;
 
-		//Update product in DB
+		// Update product in database
 		update(ref(database, `/products/${productKey}`), {
 			quantity: updatedQuantity,
 		});
@@ -96,8 +97,17 @@ const RemoveStock = () => {
 			emailList,
 		});
 
+		// Alert user of success
 		alert('Purchase successfull');
 	};
+
+	// Set input classes
+	const emailInputClasses = emailHasError
+		? 'form__buyer-email invalid'
+		: 'form__buyer-email';
+	const quantityInputClasses = quantityHasError
+		? 'form__items-bought invalid'
+		: 'form__items-bought';
 
 	return (
 		<section className={`${classes['remove-stock']} ${classes.display}`}>
@@ -147,7 +157,3 @@ const RemoveStock = () => {
 };
 
 export default RemoveStock;
-
-// Check if the email has been used
-// If it has been used, alert the customer and decline the purchase
-// If it has not been used, allow the purchase to go ahead and add the email to the DB

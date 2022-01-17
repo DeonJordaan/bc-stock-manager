@@ -3,6 +3,7 @@ import ProductContext from '../store/product-context';
 import classes from './Dropdown.module.css';
 
 const Dropdown = (props) => {
+	// Extract context values
 	const productCtx = useContext(ProductContext);
 
 	const { products } = productCtx;
@@ -17,6 +18,7 @@ const Dropdown = (props) => {
 				onChange={props.onChange}
 			>
 				<option value="Select">--Select--</option>
+				{/* Render product names to dropdown select options */}
 				{products?.length > 0 &&
 					products.map((item) => (
 						<option key={item.id} value={item.productName}>

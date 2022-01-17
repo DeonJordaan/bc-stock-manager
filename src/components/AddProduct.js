@@ -1,66 +1,100 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { set, ref } from 'firebase/database';
 import { uid } from 'uid';
-
 import database from '../store/firebase.js';
+import useInput from '../hooks/useInput.js';
 
 const AddProduct = () => {
-	const [newProductName, setNewProductName] = useState();
-	const [productDescription, setProductDescription] = useState();
+	const {
+		value: productName,
+		isValid: productNameIsValid,
+		hasError: productNameHasError,
+		valueChangeHandler: productNameChangeHandler,
+		inputBlurHandler: productNameBlurHandler,
+		reset: resetProductNameInput,
+	} = useInput((value) => value.trim() !== '');
+	const {
+		value: description,
+		isValid: descriptionIsValid,
+		hasError: descriptionHasError,
+		valueChangeHandler: descriptionChangeHandler,
+		inputBlurHandler: descriptionBlurHandler,
+		reset: resetDescriptionInput,
+	} = useInput((value) => value.trim() !== '');
 
-	const productNameHandler = (event) => {
-		setNewProductName(event.target.value);
-	};
+	let formIsValid = false;
 
-	const productDescriptionHandler = (event) => {
-		setProductDescription(event.target.value);
-	};
+	if (productNameIsValid && descriptionIsValid) {
+		formIsValid = true;
+	}
 
 	function submitHandler(event) {
 		event.preventDefault();
+
+		if (!formIsValid) {
+			alert('Please enter a valid input');
+			return;
+		}
 
 		const uuid = uid();
 
 		set(ref(database, 'products/' + uuid), {
 			key: uuid,
 			id: uuid,
-			productName: newProductName,
-			description: productDescription,
+			productName,
+			description,
 			prices: [],
 			averagePrice: 0,
 			quantity: 0,
 		});
 
 		alert('New product loaded');
-		setNewProductName('');
-		setProductDescription('');
+		resetProductNameInput('');
+		resetDescriptionInput('');
 	}
+
+	const productNameInputClasses = productNameHasError
+		? 'form__product-name invalid'
+		: 'form__product-name';
+	const descriptionInputClasses = descriptionHasError
+		? 'form__description invalid'
+		: 'form__description';
 
 	return (
 		<section className="add-product display">
 			<form onSubmit={submitHandler}>
 				<header className="form-header">Add Products</header>
-				<div className="form__items">
+				<div className={productNameInputClasses}>
 					<label htmlFor="product-name">Product Name</label>
 					<input
 						type="text"
 						className="product-name"
 						id="product-name"
-						value={newProductName || ''}
-						onChange={productNameHandler}
+						value={productName || ''}
+						onBlur={productNameBlurHandler}
+						onChange={productNameChangeHandler}
 					/>
+					{productNameHasError && (
+						<p className="error-text">
+							Please enter a valid product name.
+						</p>
+					)}
 				</div>
-				<div className="form__item-price">
-					<label htmlFor="product-description">
-						Product Description
-					</label>
+				<div className={descriptionInputClasses}>
+					<label htmlFor="description">Product Description</label>
 					<input
 						type="text"
-						className="product-description"
-						id="product-description"
-						value={productDescription || ''}
-						onChange={productDescriptionHandler}
+						className="description"
+						id="description"
+						value={description || ''}
+						onBlur={descriptionBlurHandler}
+						onChange={descriptionChangeHandler}
 					/>
+					{descriptionHasError && (
+						<p className="error-text">
+							Please enter a valid product description.
+						</p>
+					)}
 				</div>
 				<button type="submit">Add Product</button>
 			</form>

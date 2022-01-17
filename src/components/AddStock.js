@@ -1,45 +1,70 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { ref, update } from 'firebase/database';
 import database from '../store/firebase';
 import ProductContext from '../store/product-context';
+import useInput from '../hooks/useInput';
 
 const AddStock = () => {
 	const productCtx = useContext(ProductContext);
 
-	const [productName, setProductName] = useState();
-	const [productQuantity, setProductQuantity] = useState();
-	const [productPrice, setProductPrice] = useState();
+	const {
+		value: productName,
+		isValid: productNameIsValid,
+		valueChangeHandler: productNameChangeHandler,
+		reset: resetProductNameInput,
+	} = useInput((value) => value.trim() !== '');
+	const {
+		value: enteredQuantity,
+		isValid: quantityIsValid,
+		hasError: quantityHasError,
+		valueChangeHandler: quantityChangeHandler,
+		inputBlurHandler: quantityBlurHandler,
+		reset: resetQuantityInput,
+	} = useInput((value) => parseInt(value, 10) > 0);
+	const {
+		value: enteredPrice,
+		isValid: priceIsValid,
+		hasError: priceHasError,
+		valueChangeHandler: priceChangeHandler,
+		inputBlurHandler: priceBlurHandler,
+		reset: resetPriceInput,
+	} = useInput((value) => parseInt(value, 10) > 0);
+
+	let formIsValid = false;
+
+	if (productNameIsValid && quantityIsValid && priceIsValid) {
+		formIsValid = true;
+	}
 
 	let product = {};
-
-	const selectDropdownHandler = (event) => {
-		setProductName(event.target.value);
-	};
-
-	const quantityReceivedHandler = (event) => {
-		setProductQuantity(event.target.value);
-	};
-
-	const productPriceHandler = (event) => {
-		setProductPrice(event.target.value);
-	};
 
 	function submitHandler(event) {
 		event.preventDefault();
 
-		// could add validation here...
+		if (!formIsValid) {
+			alert('Please enter a valid input');
+			return;
+		}
 
 		product = {
 			name: productName.toUpperCase(),
-			quantity: +productQuantity,
-			price: +productPrice,
+			quantity: +enteredQuantity,
+			price: +enteredPrice,
 		};
 
 		addProductHandler(product);
-		setProductName('');
-		setProductQuantity('');
-		setProductPrice('');
+
+		resetProductNameInput('');
+		resetQuantityInput('');
+		resetPriceInput('');
 	}
+
+	const quantityInputClasses = quantityHasError
+		? 'form__items invalid'
+		: 'form__items';
+	const priceInputClasses = priceHasError
+		? 'form__item-price invalid'
+		: 'form__item-price';
 
 	// Add Stock function
 	const addProductHandler = (product) => {
@@ -85,7 +110,7 @@ const AddStock = () => {
 						id="product-code"
 						className="select-product"
 						value={productName || ''}
-						onChange={selectDropdownHandler}
+						onChange={productNameChangeHandler}
 					>
 						<option value="Select">--Select--</option>
 						<option value="product01">Product 1</option>
@@ -93,25 +118,37 @@ const AddStock = () => {
 						<option value="product03">Product 3</option>
 					</select>
 				</div>
-				<div className="form__items">
+				<div className={quantityInputClasses}>
 					<label htmlFor="items-received">Items Received</label>
 					<input
 						type="number"
 						className="items-received"
 						id="items-received"
-						value={productQuantity || ''}
-						onChange={quantityReceivedHandler}
+						value={enteredQuantity || ''}
+						onBlur={quantityBlurHandler}
+						onChange={quantityChangeHandler}
 					/>
+					{quantityHasError && (
+						<p className="error-text">
+							Please enter a valid quantity.
+						</p>
+					)}
 				</div>
-				<div className="form__item-price">
+				<div className={priceInputClasses}>
 					<label htmlFor="item-price">Price per Item Received</label>
 					<input
 						type="number"
 						className="item-price"
 						id="item-price"
-						value={productPrice || ''}
-						onChange={productPriceHandler}
+						value={enteredPrice || ''}
+						onBlur={priceBlurHandler}
+						onChange={priceChangeHandler}
 					/>
+					{priceHasError && (
+						<p className="error-text">
+							Please enter a valid price.
+						</p>
+					)}
 				</div>
 				<button type="submit">Add Stock</button>
 			</form>

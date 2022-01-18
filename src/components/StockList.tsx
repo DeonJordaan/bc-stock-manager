@@ -3,7 +3,7 @@ import StockItem from './StockItem';
 import ProductContext from '../store/product-context';
 import classes from './StockList.module.css';
 
-const StockList = () => {
+const StockList: React.FC = () => {
 	// Extract context values
 	const productCtx = useContext(ProductContext);
 

@@ -1,13 +1,18 @@
-import { ref, onValue } from 'firebase/database';
 import React, { useState, useEffect } from 'react';
-import database from './firebase.js';
+import { ref, onValue } from 'firebase/database';
+import database from './firebase.jsx';
+import Product from '../interfaces/product.js';
 
-const ProductContext = React.createContext({
+type ProductContextObject = {
+	products: Product[];
+};
+
+const ProductContext = React.createContext<ProductContextObject>({
 	products: [],
 });
 
-export const ProductContextProvider = (props) => {
-	const [products, setProducts] = useState();
+export const ProductContextProvider: React.FC = (props) => {
+	const [products, setProducts] = useState<Product[]>();
 
 	// Extract products from database on render
 	useEffect(() => {
@@ -15,11 +20,13 @@ export const ProductContextProvider = (props) => {
 			setProducts([]);
 			const dbProducts = snapshot.val();
 
-			const loadedProducts = [];
+			const products: Product[] = dbProducts.products;
+
+			const loadedProducts: Product[] = [];
 
 			// Push products to array
-			if (dbProducts) {
-				Object.values(dbProducts.products).map((item) => {
+			if (products) {
+				Object.values(products).map((item) => {
 					loadedProducts.push(item);
 					return loadedProducts;
 				});

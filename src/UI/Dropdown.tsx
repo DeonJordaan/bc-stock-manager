@@ -2,7 +2,11 @@ import React, { Fragment, useContext } from 'react';
 import ProductContext from '../store/product-context';
 import classes from './Dropdown.module.css';
 
-const Dropdown = (props) => {
+const Dropdown: React.FC<{
+	name: string;
+	value: string | '';
+	onChange: (event: React.FormEvent) => void;
+}> = (props) => {
 	// Extract context values
 	const productCtx = useContext(ProductContext);
 

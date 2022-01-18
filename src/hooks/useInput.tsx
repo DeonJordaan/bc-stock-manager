@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 const useInput = (validateValue) => {
 	// Save entered value to state
-	const [enteredValue, setEnteredValue] = useState('');
+	const [enteredValue, setEnteredValue] = useState(null);
 	// Has the input been touched by the user
 	const [isTouched, setIsTouched] = useState(false);
 
@@ -21,7 +21,7 @@ const useInput = (validateValue) => {
 
 	// Reset input and isTouched state
 	const reset = () => {
-		setEnteredValue('');
+		setEnteredValue(null);
 		setIsTouched(false);
 	};
 

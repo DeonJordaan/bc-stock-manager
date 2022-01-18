@@ -7,7 +7,7 @@ import useInput from '../hooks/useInput';
 import Dropdown from '../UI/Dropdown';
 import classes from './RemoveStock.module.css';
 
-const RemoveStock = () => {
+const RemoveStock: React.FC = () => {
 	// Extract context values
 	const emailCtx = useContext(EmailContext);
 	const productCtx = useContext(ProductContext);
@@ -19,7 +19,7 @@ const RemoveStock = () => {
 		isValid: productNameIsValid,
 		valueChangeHandler: productNameChangeHandler,
 		reset: resetProductNameInput,
-	} = useInput((value) => value.trim() !== '');
+	} = useInput((value: string) => value.trim() !== '');
 	const {
 		value: enteredEmail,
 		isValid: emailIsValid,
@@ -27,7 +27,7 @@ const RemoveStock = () => {
 		valueChangeHandler: emailChangeHandler,
 		inputBlurHandler: emailBlurHandler,
 		reset: resetEmailInput,
-	} = useInput((value) => value.includes('@'));
+	} = useInput((value: string) => value.includes('@'));
 	const {
 		value: enteredQuantity,
 		isValid: quantityIsValid,
@@ -35,7 +35,7 @@ const RemoveStock = () => {
 		valueChangeHandler: quantityChangeHandler,
 		inputBlurHandler: quantityBlurHandler,
 		reset: resetQuantityInput,
-	} = useInput((value) => parseInt(value, 10) > 0);
+	} = useInput((value: string) => parseInt(value, 10) > 0);
 
 	// Set form validity
 	let formIsValid = false;
@@ -47,7 +47,7 @@ const RemoveStock = () => {
 	let product = {};
 
 	// Form submit function
-	function submitHandler(event) {
+	function submitHandler(event: React.FormEvent) {
 		event.preventDefault();
 
 		if (!formIsValid) {
@@ -77,13 +77,16 @@ const RemoveStock = () => {
 	}
 
 	// Subtract the items from the database
-	const removeProductHandler = () => {
+	const removeProductHandler = (product: {
+		name?: string;
+		quantity?: number;
+	}) => {
 		// Select product from state
 		const thisProduct = productCtx.products.find(
 			(element) => element.productName === product.name
 		);
 
-		// eslint-disable-next-line no-unused-vars
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const updatedEmails = emailCtx.emails.push(enteredEmail);
 		const updatedQuantity = thisProduct.quantity - product.quantity;
 		const productKey = thisProduct.id;

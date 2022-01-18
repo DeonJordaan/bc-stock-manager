@@ -1,13 +1,16 @@
 import { ref, onValue } from 'firebase/database';
 import React, { useState, useEffect } from 'react';
-import database from './firebase.js';
+import database from './firebase.jsx';
 
-const EmailContext = React.createContext({
+type EmailContextObject = {
+	emails: string[];
+};
+const EmailContext = React.createContext<EmailContextObject>({
 	emails: [],
 });
 
-export const EmailContextProvider = (props) => {
-	const [emails, setEmails] = useState([]);
+export const EmailContextProvider: React.FC = (props) => {
+	const [emails, setEmails] = useState<string[]>([]);
 
 	// Extract emails from database on render
 	useEffect(() => {
@@ -15,11 +18,11 @@ export const EmailContextProvider = (props) => {
 			setEmails([]);
 			const dbEmails = snapshot.val();
 
-			const loadedEmails = [];
+			const loadedEmails: string[] = [];
 
 			// Push emails to array
 			if (dbEmails.emailList) {
-				dbEmails.emailList?.map((item) => {
+				dbEmails.emailList?.map((item: string) => {
 					loadedEmails.push(item);
 					return loadedEmails;
 				});

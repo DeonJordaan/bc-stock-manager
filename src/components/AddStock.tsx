@@ -6,7 +6,7 @@ import useInput from '../hooks/useInput';
 import classes from './AddStock.module.css';
 import Dropdown from '../UI/Dropdown';
 
-const AddStock = () => {
+const AddStock: React.FC = () => {
 	// Extract context values
 	const productCtx = useContext(ProductContext);
 
@@ -16,7 +16,7 @@ const AddStock = () => {
 		isValid: productNameIsValid,
 		valueChangeHandler: productNameChangeHandler,
 		reset: resetProductNameInput,
-	} = useInput((value) => value.trim() !== '');
+	} = useInput((value: string) => value.trim() !== '');
 	const {
 		value: enteredQuantity,
 		isValid: quantityIsValid,
@@ -24,7 +24,7 @@ const AddStock = () => {
 		valueChangeHandler: quantityChangeHandler,
 		inputBlurHandler: quantityBlurHandler,
 		reset: resetQuantityInput,
-	} = useInput((value) => parseInt(value, 10) > 0);
+	} = useInput((value: string) => parseInt(value, 10) > 0);
 	const {
 		value: enteredPrice,
 		isValid: priceIsValid,
@@ -32,7 +32,7 @@ const AddStock = () => {
 		valueChangeHandler: priceChangeHandler,
 		inputBlurHandler: priceBlurHandler,
 		reset: resetPriceInput,
-	} = useInput((value) => parseInt(value, 10) > 0);
+	} = useInput((value: string) => parseInt(value, 10) > 0);
 
 	// Set form validity
 	let formIsValid = false;
@@ -44,7 +44,7 @@ const AddStock = () => {
 	let product = {};
 
 	// Form submit function
-	function submitHandler(event) {
+	function submitHandler(event: React.FormEvent) {
 		event.preventDefault();
 
 		if (!formIsValid) {
@@ -62,13 +62,17 @@ const AddStock = () => {
 		addProductHandler(product);
 
 		// Reset inputs
-		resetProductNameInput('');
-		resetQuantityInput('');
-		resetPriceInput('');
+		resetProductNameInput();
+		resetQuantityInput();
+		resetPriceInput();
 	}
 
 	// Add Stock function
-	const addProductHandler = (product) => {
+	const addProductHandler = (product: {
+		name?: string;
+		price?: number;
+		quantity?: number;
+	}) => {
 		// Select product from state
 		const thisProduct = productCtx.products.find(
 			(element) => element.productName === product.name

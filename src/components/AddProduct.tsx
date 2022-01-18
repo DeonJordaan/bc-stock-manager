@@ -1,15 +1,16 @@
 import React, { useContext } from 'react';
 import { set, ref } from 'firebase/database';
 import { uid } from 'uid';
-import database from '../store/firebase.js';
+import database from '../store/firebase.jsx';
 import ProductContext from '../store/product-context';
 import useInput from '../hooks/useInput.js';
 import classes from './AddProduct.module.css';
+import Product from '../interfaces/product.js';
 
-const AddProduct = () => {
+const AddProduct: React.FC = () => {
 	// Extract context values
 	const productCtx = useContext(ProductContext);
-	const products = productCtx.products;
+	const products: Product[] = productCtx.products;
 
 	// Gather user input via useInput hook
 	const {
@@ -19,7 +20,7 @@ const AddProduct = () => {
 		valueChangeHandler: productNameChangeHandler,
 		inputBlurHandler: productNameBlurHandler,
 		reset: resetProductNameInput,
-	} = useInput((value) => value.trim() !== '');
+	} = useInput((value: string) => value.trim() !== '');
 	const {
 		value: description,
 		isValid: descriptionIsValid,
@@ -27,7 +28,7 @@ const AddProduct = () => {
 		valueChangeHandler: descriptionChangeHandler,
 		inputBlurHandler: descriptionBlurHandler,
 		reset: resetDescriptionInput,
-	} = useInput((value) => value.trim() !== '');
+	} = useInput((value: string) => value.trim() !== '');
 
 	// Set form validity
 	let formIsValid = false;
@@ -37,7 +38,7 @@ const AddProduct = () => {
 	}
 
 	// Extract existing product names
-	let productNames = [];
+	let productNames: string[] = [];
 
 	if (products) {
 		for (const product of products) {
@@ -46,7 +47,7 @@ const AddProduct = () => {
 	}
 
 	// Form submit function
-	function submitHandler(event) {
+	function submitHandler(event: React.FormEvent) {
 		event.preventDefault();
 
 		if (!formIsValid) {
@@ -63,7 +64,7 @@ const AddProduct = () => {
 		}
 
 		// Add new product to database
-		const uuid = uid();
+		const uuid: string = uid();
 
 		set(ref(database, 'products/' + uuid), {
 			key: uuid,
@@ -77,8 +78,8 @@ const AddProduct = () => {
 
 		// Alert user of success and reset inputs
 		alert('New product added');
-		resetProductNameInput('');
-		resetDescriptionInput('');
+		resetProductNameInput();
+		resetDescriptionInput();
 	}
 
 	// Set input classes

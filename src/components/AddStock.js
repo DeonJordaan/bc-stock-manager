@@ -92,9 +92,10 @@ const AddStock = () => {
 
 		// Update product quantity
 		const newQuantity = thisProduct.quantity + product.quantity;
-		const productKey = thisProduct.id;
 
 		// Update product in database
+		const productKey = thisProduct.id;
+
 		update(ref(database, `/products/${productKey}`), {
 			quantity: newQuantity,
 			prices: thisProduct.prices,

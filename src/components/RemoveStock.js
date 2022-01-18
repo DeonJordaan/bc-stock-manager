@@ -93,6 +93,7 @@ const RemoveStock = () => {
 			quantity: updatedQuantity,
 		});
 
+		// Update email list in database
 		update(ref(database, `/`), {
 			emailList,
 		});

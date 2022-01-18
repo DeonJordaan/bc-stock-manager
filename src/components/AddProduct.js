@@ -39,8 +39,10 @@ const AddProduct = () => {
 	// Extract existing product names
 	let productNames = [];
 
-	for (const product of products) {
-		productNames.push(product.productName);
+	if (products) {
+		for (const product of products) {
+			productNames.push(product.productName);
+		}
 	}
 
 	// Form submit function

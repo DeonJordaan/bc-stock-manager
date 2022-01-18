@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { set, ref } from 'firebase/database';
 import { uid } from 'uid';
 import database from '../store/firebase.js';
+import ProductContext from '../store/product-context';
 import useInput from '../hooks/useInput.js';
 import classes from './AddProduct.module.css';
 
 const AddProduct = () => {
+	// Extract context values
+	const productCtx = useContext(ProductContext);
+	const products = productCtx.products;
+
 	// Gather user input via useInput hook
 	const {
 		value: productName,
@@ -31,6 +36,13 @@ const AddProduct = () => {
 		formIsValid = true;
 	}
 
+	// Extract existing product names
+	let productNames = [];
+
+	for (const product of products) {
+		productNames.push(product.productName);
+	}
+
 	// Form submit function
 	function submitHandler(event) {
 		event.preventDefault();
@@ -40,13 +52,21 @@ const AddProduct = () => {
 			return;
 		}
 
-		const uuid = uid();
+		// Check if product already exists on database
+		const productNameUpperCase = productName.toUpperCase();
+
+		if (productNames.includes(productNameUpperCase)) {
+			alert('Product already exists. Please choose another product name');
+			return;
+		}
 
 		// Add new product to database
+		const uuid = uid();
+
 		set(ref(database, 'products/' + uuid), {
 			key: uuid,
 			id: uuid,
-			productName,
+			productName: productNameUpperCase,
 			description,
 			prices: [],
 			averagePrice: 0,
@@ -54,7 +74,7 @@ const AddProduct = () => {
 		});
 
 		// Alert user of success and reset inputs
-		alert('New product loaded');
+		alert('New product added');
 		resetProductNameInput('');
 		resetDescriptionInput('');
 	}

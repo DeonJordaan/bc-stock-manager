@@ -1,12 +1,12 @@
 import DataInterface from './dataInterface';
 
 class Product {
-	key: string;
-	id: string;
+	key?: string;
+	id?: string;
 	productName: string;
-	description: string;
-	prices: number[];
-	averagePrice: number;
+	description?: string;
+	prices?: number[] | undefined;
+	averagePrice?: number;
 	quantity: number;
 
 	// FIXME NOT AT ALL SURE ABOUT THIS SETUP AND THE NEED OF THE DATAINTERFACE

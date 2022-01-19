@@ -4,7 +4,7 @@ import database from './firebase.jsx';
 import Product from '../interfaces/product.js';
 
 type ProductContextObject = {
-	products: Product[];
+	products: Product[] | undefined;
 };
 
 const ProductContext = React.createContext<ProductContextObject>({

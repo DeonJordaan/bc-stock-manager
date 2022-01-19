@@ -1,27 +1,35 @@
 import { useState } from 'react';
 
-const useInput = (validateValue) => {
+const useInput = (validateValue: (value: string) => boolean) => {
 	// Save entered value to state
-	const [enteredValue, setEnteredValue] = useState(null);
+	const [enteredValue, setEnteredValue] = useState<string>();
 	// Has the input been touched by the user
-	const [isTouched, setIsTouched] = useState(false);
+	const [isTouched, setIsTouched] = useState<boolean>(false);
 
-	const valueIsValid = validateValue(enteredValue);
-	const hasError = !valueIsValid && isTouched;
+	let valueIsValid: boolean;
+	let hasError: boolean;
+
+	if (enteredValue) {
+		valueIsValid = validateValue(enteredValue);
+		hasError = !valueIsValid && isTouched;
+	}
 
 	// Gather entered input value
-	const valueChangeHandler = (event) => {
+	const valueChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+		// const valueChangeHandler = (event: {
+		// 	target: { value: SetStateAction<string | undefined> };
+		// }) => {
 		setEnteredValue(event.target.value);
 	};
 
 	// onBlur event sets isTouched state
-	const inputBlurHandler = (event) => {
+	const inputBlurHandler = () => {
 		setIsTouched(true);
 	};
 
 	// Reset input and isTouched state
 	const reset = () => {
-		setEnteredValue(null);
+		setEnteredValue('');
 		setIsTouched(false);
 	};
 

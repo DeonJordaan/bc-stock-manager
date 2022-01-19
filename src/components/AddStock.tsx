@@ -5,10 +5,12 @@ import ProductContext from '../store/product-context';
 import useInput from '../hooks/useInput';
 import classes from './AddStock.module.css';
 import Dropdown from '../UI/Dropdown';
+import Product from '../interfaces/product';
 
 const AddStock: React.FC = () => {
 	// Extract context values
 	const productCtx = useContext(ProductContext);
+	const products = productCtx.products!;
 
 	// Gather user input via useInput hook
 	const {
@@ -41,7 +43,12 @@ const AddStock: React.FC = () => {
 		formIsValid = true;
 	}
 
-	let product = {};
+	// let product;
+	let product: {
+		name?: string;
+		price?: number;
+		quantity?: number;
+	} = {};
 
 	// Form submit function
 	function submitHandler(event: React.FormEvent) {
@@ -54,9 +61,9 @@ const AddStock: React.FC = () => {
 
 		// Assign gathered inputs to product
 		product = {
-			name: productName.toUpperCase(),
-			quantity: +enteredQuantity,
-			price: +enteredPrice,
+			name: productName!.toUpperCase(),
+			quantity: +enteredQuantity!,
+			price: +enteredPrice!,
 		};
 
 		addProductHandler(product);
@@ -74,9 +81,13 @@ const AddStock: React.FC = () => {
 		quantity?: number;
 	}) => {
 		// Select product from state
-		const thisProduct = productCtx.products.find(
-			(element) => element.productName === product.name
-		);
+		let thisProduct: Product;
+
+		if (products) {
+			thisProduct = products.find(
+				(element) => element.productName === product.name
+			);
+		}
 
 		// Update product prices array
 		const price = product.price;
@@ -124,7 +135,7 @@ const AddStock: React.FC = () => {
 				<header className="form-header">Add Stock</header>
 				<div className="form__select-product">
 					<Dropdown
-						name={product}
+						name={productName}
 						value={productName || ''}
 						onChange={productNameChangeHandler}
 					/>

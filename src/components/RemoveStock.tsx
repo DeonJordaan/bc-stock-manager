@@ -11,6 +11,8 @@ const RemoveStock: React.FC = () => {
 	// Extract context values
 	const emailCtx = useContext(EmailContext);
 	const productCtx = useContext(ProductContext);
+
+	const products = productCtx.products!;
 	const emailList = emailCtx.emails;
 
 	// Gather user input via useInput hook
@@ -82,14 +84,15 @@ const RemoveStock: React.FC = () => {
 		quantity?: number;
 	}) => {
 		// Select product from state
-		const thisProduct = productCtx.products.find(
+		const thisProduct = products.find(
 			(element) => element.productName === product.name
 		);
 
+		//FIXME Is it ok to use the bang here with thisProduct?
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const updatedEmails = emailCtx.emails.push(enteredEmail);
-		const updatedQuantity = thisProduct.quantity - product.quantity;
-		const productKey = thisProduct.id;
+		const updatedQuantity = thisProduct!.quantity - product.quantity;
+		const productKey = thisProduct!.id;
 
 		// Update product in database
 		update(ref(database, `/products/${productKey}`), {
@@ -119,7 +122,7 @@ const RemoveStock: React.FC = () => {
 				<header className="form-header">Remove Stock</header>
 				<div className="form__select-product">
 					<Dropdown
-						name={product}
+						name={productName}
 						value={productName || ''}
 						onChange={productNameChangeHandler}
 					/>

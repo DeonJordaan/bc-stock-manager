@@ -56,7 +56,7 @@ const AddProduct: React.FC = () => {
 		}
 
 		// Check if product already exists on database
-		const productNameUpperCase = productName.toUpperCase();
+		const productNameUpperCase = productName!.toUpperCase();
 
 		if (productNames.includes(productNameUpperCase)) {
 			alert('Product already exists. Please choose another product name');

@@ -2,19 +2,22 @@ import React, { useContext } from 'react';
 import StockItem from './StockItem';
 import ProductContext from '../store/product-context';
 import classes from './StockList.module.css';
+import Product from '../interfaces/product';
 
 const StockList: React.FC = () => {
 	// Extract context values
 	const productCtx = useContext(ProductContext);
 
+	const products: Product[] | undefined = productCtx.products!;
+
 	// Set default content
 	let stockContent = <div>No products available</div>;
 
 	// If products are available, render stock item for each product
-	if (productCtx.products?.length > 0) {
+	if (products && products.length > 0) {
 		stockContent = (
 			<ul id="stock-list">
-				{productCtx.products.map((product) => (
+				{products.map((product) => (
 					<StockItem
 						key={product.id}
 						name={product.productName}

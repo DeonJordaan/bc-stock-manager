@@ -1,6 +1,6 @@
 import { ref, onValue } from 'firebase/database';
 import React, { useState, useEffect } from 'react';
-import database from './firebase.jsx';
+import database from './firebase';
 
 type EmailContextObject = {
 	emails: string[];

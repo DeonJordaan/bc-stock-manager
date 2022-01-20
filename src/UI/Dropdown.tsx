@@ -12,6 +12,18 @@ const Dropdown: React.FC<{
 
 	const { products } = productCtx;
 
+	let dropdownMenu;
+
+	if (products) {
+		dropdownMenu =
+			products?.length > 0 &&
+			products.map((item) => (
+				<option key={item.id} value={item.productName}>
+					{item.productName}
+				</option>
+			));
+	}
+
 	return (
 		<Fragment>
 			<label htmlFor={props.name}>Select a Product Code</label>
@@ -23,12 +35,7 @@ const Dropdown: React.FC<{
 			>
 				<option value="Select">--Select--</option>
 				{/* Render product names to dropdown select options */}
-				{products?.length > 0 &&
-					products.map((item) => (
-						<option key={item.id} value={item.productName}>
-							{item.productName}
-						</option>
-					))}
+				{dropdownMenu}
 			</select>
 		</Fragment>
 	);

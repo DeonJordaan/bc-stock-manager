@@ -1,16 +1,16 @@
 import React, { useContext } from 'react';
 import { set, ref } from 'firebase/database';
 import { uid } from 'uid';
-import database from '../store/firebase.jsx';
+import database from '../store/firebase';
 import ProductContext from '../store/product-context';
-import useInput from '../hooks/useInput.js';
+import useInput from '../hooks/useInput';
 import classes from './AddProduct.module.css';
 import Product from '../interfaces/product.js';
 
 const AddProduct: React.FC = () => {
 	// Extract context values
 	const productCtx = useContext(ProductContext);
-	const products: Product[] = productCtx.products;
+	const products: Product[] | undefined = productCtx.products;
 
 	// Gather user input via useInput hook
 	const {

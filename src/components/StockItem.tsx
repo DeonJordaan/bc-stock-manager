@@ -2,9 +2,9 @@ import React from 'react';
 import classes from './StockItem.module.css';
 
 const StockItem: React.FC<{
-	name: string;
-	averagePrice: number;
-	quantity: number;
+	name: string | undefined;
+	averagePrice: number | undefined;
+	quantity: number | undefined;
 }> = (props) => {
 	return (
 		<li className={classes['product__item']}>

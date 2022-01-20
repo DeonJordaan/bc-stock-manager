@@ -6,14 +6,15 @@ import EmailContext from '../store/email-context';
 import useInput from '../hooks/useInput';
 import Dropdown from '../UI/Dropdown';
 import classes from './RemoveStock.module.css';
+import Product from '../interfaces/product';
 
 const RemoveStock: React.FC = () => {
 	// Extract context values
 	const emailCtx = useContext(EmailContext);
 	const productCtx = useContext(ProductContext);
 
-	const products = productCtx.products!;
-	const emailList = emailCtx.emails;
+	const products: Product[] | undefined = productCtx.products!;
+	const emailList: string[] = emailCtx.emails;
 
 	// Gather user input via useInput hook
 	const {
@@ -91,7 +92,7 @@ const RemoveStock: React.FC = () => {
 		//FIXME Is it ok to use the bang here with thisProduct?
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const updatedEmails = emailCtx.emails.push(enteredEmail);
-		const updatedQuantity = thisProduct!.quantity - product.quantity;
+		const updatedQuantity = thisProduct!.quantity - product.quantity!;
 		const productKey = thisProduct!.id;
 
 		// Update product in database

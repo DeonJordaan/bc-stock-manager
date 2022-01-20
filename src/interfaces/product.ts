@@ -9,7 +9,6 @@ class Product {
 	averagePrice?: number;
 	quantity: number;
 
-	// FIXME NOT AT ALL SURE ABOUT THIS SETUP AND THE NEED OF THE DATAINTERFACE
 	constructor(data: DataInterface) {
 		this.key = data.key;
 		this.id = data.id;

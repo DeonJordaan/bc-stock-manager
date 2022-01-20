@@ -10,7 +10,7 @@ import Product from '../interfaces/product';
 const AddStock: React.FC = () => {
 	// Extract context values
 	const productCtx = useContext(ProductContext);
-	const products = productCtx.products!;
+	const products: Product[] | undefined = productCtx.products!;
 
 	// Gather user input via useInput hook
 	const {
@@ -43,12 +43,12 @@ const AddStock: React.FC = () => {
 		formIsValid = true;
 	}
 
-	// let product;
-	let product: {
-		name?: string;
-		price?: number;
-		quantity?: number;
-	} = {};
+	let product;
+	// let product: {
+	// 	name?: string;
+	// 	price?: number;
+	// 	quantity?: number;
+	// } = {};
 
 	// Form submit function
 	function submitHandler(event: React.FormEvent) {
@@ -61,9 +61,9 @@ const AddStock: React.FC = () => {
 
 		// Assign gathered inputs to product
 		product = {
-			name: productName!.toUpperCase(),
-			quantity: +enteredQuantity!,
-			price: +enteredPrice!,
+			name: productName.toUpperCase(),
+			quantity: +enteredQuantity,
+			price: +enteredPrice,
 		};
 
 		addProductHandler(product);
@@ -76,45 +76,47 @@ const AddStock: React.FC = () => {
 
 	// Add Stock function
 	const addProductHandler = (product: {
-		name?: string;
-		price?: number;
-		quantity?: number;
+		name: string;
+		price: number;
+		quantity: number;
 	}) => {
 		// Select product from state
-		let thisProduct: Product;
-
-		if (products) {
-			thisProduct = products.find(
-				(element) => element.productName === product.name
-			);
-		}
-
-		// Update product prices array
-		const price = product.price;
-
-		if (thisProduct.prices) {
-			thisProduct.prices.push(price);
-		} else {
-			thisProduct.prices = [price];
-		}
-
-		// Calculate average price
-		const sumOfPrices = thisProduct.prices.reduce(
-			(sum, price) => sum + price,
-			0
+		const thisProduct = products.find(
+			(element) => element.productName === product.name
 		);
-		const newAveragePrice = sumOfPrices / thisProduct.prices.length;
 
-		// Update product quantity
-		const newQuantity = thisProduct.quantity + product.quantity;
+		let newAveragePrice: number
+		let newQuantity
+		let productKey
 
-		// Update product in database
-		const productKey = thisProduct.id;
+		if (thisProduct) {
+			// Update product prices array
+			const price = product.price;
+
+			if (thisProduct.prices) {
+				thisProduct.prices.push(price);
+			} else {
+				thisProduct.prices = [price];
+			}
+
+			// Calculate average price
+			const sumOfPrices = thisProduct.prices.reduce(
+				(sum, price) => sum + price,
+				0
+			);
+			newAveragePrice = sumOfPrices / thisProduct.prices.length;
+
+			// Update product quantity
+			newQuantity = thisProduct.quantity + product.quantity;
+
+			// Update product in database
+			productKey = thisProduct.id;
+		}
 
 		update(ref(database, `/products/${productKey}`), {
 			quantity: newQuantity,
-			prices: thisProduct.prices,
-			averagePrice: newAveragePrice.toFixed(2),
+			prices: thisProduct?.prices,
+			averagePrice: newAveragePrice!.toFixed(2),
 		});
 
 		// Alert user of success

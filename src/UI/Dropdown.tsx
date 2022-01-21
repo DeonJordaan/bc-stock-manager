@@ -12,6 +12,7 @@ const Dropdown: React.FC<{
 
 	const { products } = productCtx;
 
+	// Render product names to dropdown select options
 	let dropdownMenu;
 
 	if (products) {
@@ -34,7 +35,7 @@ const Dropdown: React.FC<{
 				onChange={props.onChange}
 			>
 				<option value="Select">--Select--</option>
-				{/* Render product names to dropdown select options */}
+
 				{dropdownMenu}
 			</select>
 		</Fragment>

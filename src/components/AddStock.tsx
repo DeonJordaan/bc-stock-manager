@@ -44,11 +44,6 @@ const AddStock: React.FC = () => {
 	}
 
 	let product;
-	// let product: {
-	// 	name?: string;
-	// 	price?: number;
-	// 	quantity?: number;
-	// } = {};
 
 	// Form submit function
 	function submitHandler(event: React.FormEvent) {
@@ -85,9 +80,9 @@ const AddStock: React.FC = () => {
 			(element) => element.productName === product.name
 		);
 
-		let newAveragePrice: number
-		let newQuantity
-		let productKey
+		let newAveragePrice: number;
+		let newQuantity;
+		let productKey;
 
 		if (thisProduct) {
 			// Update product prices array

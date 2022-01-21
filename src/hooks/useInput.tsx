@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 const useInput = (validateValue: (value: string) => boolean) => {
 	// Save entered value to state
@@ -21,7 +21,7 @@ const useInput = (validateValue: (value: string) => boolean) => {
 	};
 
 	// onBlur event sets isTouched state
-	const inputBlurHandler = () => {
+	const inputBlurHandler = (event: React.FocusEvent<Element>) => {
 		setIsTouched(true);
 	};
 

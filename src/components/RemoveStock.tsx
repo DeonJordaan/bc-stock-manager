@@ -89,7 +89,6 @@ const RemoveStock: React.FC = () => {
 			(element) => element.productName === product.name
 		);
 
-		//FIXME Is it ok to use the bang here with thisProduct?
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const updatedEmails = emailCtx.emails.push(enteredEmail);
 		const updatedQuantity = thisProduct!.quantity - product.quantity!;

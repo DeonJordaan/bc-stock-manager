@@ -62,10 +62,14 @@ const AddStock = () => {
 		addProductHandler(product);
 
 		// Reset inputs
+		formReset();
+	}
+
+	const formReset = () => {
 		resetProductNameInput('');
 		resetQuantityInput('');
 		resetPriceInput('');
-	}
+	};
 
 	// Add Stock function
 	const addProductHandler = (product) => {
@@ -120,7 +124,7 @@ const AddStock = () => {
 				<header className="form-header">Add Stock</header>
 				<div className="form__select-product">
 					<Dropdown
-						name={product}
+						name={productName}
 						value={productName || ''}
 						onChange={productNameChangeHandler}
 					/>

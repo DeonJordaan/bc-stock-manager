@@ -11,6 +11,8 @@ const RemoveStock = () => {
 	// Extract context values
 	const emailCtx = useContext(EmailContext);
 	const productCtx = useContext(ProductContext);
+
+	const products = productCtx.products;
 	const emailList = emailCtx.emails;
 
 	// Gather user input via useInput hook
@@ -63,32 +65,48 @@ const RemoveStock = () => {
 		};
 
 		// Check if email has been used
-		if (emailCtx.emails?.includes(enteredEmail)) {
+		if (emailList?.includes(enteredEmail)) {
 			alert('Sorry! Only one purchase per customer allowed');
 		} else {
-			//If not, continue with purchase
+			// If not, continue with purchase
 			removeProductHandler(product);
-		}
 
-		// Reset inputs
+			// Reset inputs
+			formReset();
+		}
+	}
+
+	const formReset = () => {
 		resetProductNameInput();
 		resetEmailInput();
 		resetQuantityInput();
-	}
+	};
 
 	// Subtract the items from the database
 	const removeProductHandler = () => {
 		// Select product from state
-		const thisProduct = productCtx.products.find(
+		const thisProduct = products.find(
 			(element) => element.productName === product.name
 		);
 
 		// eslint-disable-next-line no-unused-vars
 		const updatedEmails = emailCtx.emails.push(enteredEmail);
-		const updatedQuantity = thisProduct.quantity - product.quantity;
-		const productKey = thisProduct.id;
+
+		//Check if enough stock to process ordered quantity
+		let updatedQuantity;
+		const currentQuantity = thisProduct?.quantity;
+
+		if (currentQuantity && currentQuantity > product.quantity) {
+			updatedQuantity = currentQuantity - product.quantity;
+		} else {
+			alert(
+				`Sorry! We only have ${currentQuantity} in stock. Please reduce your quantity.`
+			);
+		}
 
 		// Update product in database
+		const productKey = thisProduct.id;
+
 		update(ref(database, `/products/${productKey}`), {
 			quantity: updatedQuantity,
 		});
@@ -116,7 +134,7 @@ const RemoveStock = () => {
 				<header className="form-header">Remove Stock</header>
 				<div className="form__select-product">
 					<Dropdown
-						name={product}
+						name={productName}
 						value={productName || ''}
 						onChange={productNameChangeHandler}
 					/>

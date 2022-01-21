@@ -9,10 +9,10 @@ const useInput = (validateValue: (value: string) => boolean) => {
 	let valueIsValid: boolean | undefined;
 	let hasError: boolean | undefined;
 
-	if (enteredValue) {
-		valueIsValid = validateValue(enteredValue);
-		hasError = !valueIsValid && isTouched;
-	}
+	// if (enteredValue) {
+	valueIsValid = validateValue(enteredValue);
+	hasError = !valueIsValid && isTouched;
+	// }
 
 	// Gather entered input value
 	const valueChangeHandler = (event: React.FormEvent<Element>) => {
@@ -21,7 +21,7 @@ const useInput = (validateValue: (value: string) => boolean) => {
 	};
 
 	// onBlur event sets isTouched state
-	const inputBlurHandler = (event: React.FocusEvent<Element>) => {
+	const inputBlurHandler = () => {
 		setIsTouched(true);
 	};
 

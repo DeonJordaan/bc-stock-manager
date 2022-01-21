@@ -6,8 +6,8 @@ class Product implements DataInterface {
 	productName: string;
 	description: string;
 	prices: number[];
-	averagePrice: number;
-	quantity: number;
+	averagePrice: number = 0;
+	quantity: number = 0;
 
 	constructor(data: DataInterface) {
 		this.key = data.key;

@@ -71,13 +71,17 @@ const RemoveStock: React.FC = () => {
 		} else {
 			//If not, continue with purchase
 			removeProductHandler(product);
-		}
 
-		// Reset inputs
+			// Reset inputs
+			formReset();
+		}
+	}
+
+	const formReset = () => {
 		resetProductNameInput();
 		resetEmailInput();
 		resetQuantityInput();
-	}
+	};
 
 	// Subtract the items from the database
 	const removeProductHandler = (product: {
@@ -91,10 +95,22 @@ const RemoveStock: React.FC = () => {
 
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const updatedEmails = emailCtx.emails.push(enteredEmail);
-		const updatedQuantity = thisProduct!.quantity - product.quantity!;
-		const productKey = thisProduct!.id;
+
+		//Check if enough stock to process ordered quantity
+		let updatedQuantity;
+		const currentQuantity = thisProduct?.quantity;
+
+		if (currentQuantity && currentQuantity > product.quantity!) {
+			updatedQuantity = thisProduct.quantity - product.quantity!;
+		} else {
+			alert(
+				`Sorry! We only have ${currentQuantity} in stock. Please reduce your quantity.`
+			);
+		}
 
 		// Update product in database
+		const productKey = thisProduct!.id;
+
 		update(ref(database, `/products/${productKey}`), {
 			quantity: updatedQuantity,
 		});

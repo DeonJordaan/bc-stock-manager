@@ -118,6 +118,9 @@ const AddStock: React.FC = () => {
 		alert('New stock added!');
 	};
 
+	console.log(quantityHasError);
+	console.log(priceHasError);
+
 	// Set input classes
 	const quantityInputClasses = quantityHasError
 		? 'form__items invalid'

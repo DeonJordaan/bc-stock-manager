@@ -5,7 +5,7 @@ import database from '../store/firebase';
 import ProductContext from '../store/product-context';
 import useInput from '../hooks/useInput';
 import classes from './AddProduct.module.css';
-import Product from '../interfaces/product.js';
+import Product from '../types/product.js';
 
 const AddProduct: React.FC = () => {
 	// Extract context values
@@ -78,9 +78,13 @@ const AddProduct: React.FC = () => {
 
 		// Alert user of success and reset inputs
 		alert('New product added');
+		formReset();
+	}
+
+	const formReset = () => {
 		resetProductNameInput();
 		resetDescriptionInput();
-	}
+	};
 
 	// Set input classes
 	const productNameInputClasses = productNameHasError

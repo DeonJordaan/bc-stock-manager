@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ref, onValue } from 'firebase/database';
 import database from './firebase';
-import Product from '../interfaces/product.js';
+import Product from '../types/product.js';
 
 type ProductContextObject = {
 	products: Product[] | undefined;

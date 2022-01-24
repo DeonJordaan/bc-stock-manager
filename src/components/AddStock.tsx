@@ -5,7 +5,7 @@ import ProductContext from '../store/product-context';
 import useInput from '../hooks/useInput';
 import classes from './AddStock.module.css';
 import Dropdown from '../UI/Dropdown';
-import Product from '../interfaces/product';
+import Product from '../types/product';
 
 const AddStock: React.FC = () => {
 	// Extract context values
@@ -64,10 +64,14 @@ const AddStock: React.FC = () => {
 		addProductHandler(product);
 
 		// Reset inputs
+		formReset();
+	}
+
+	const formReset = () => {
 		resetProductNameInput();
 		resetQuantityInput();
 		resetPriceInput();
-	}
+	};
 
 	// Add Stock function
 	const addProductHandler = (product: {
@@ -104,10 +108,10 @@ const AddStock: React.FC = () => {
 			// Update product quantity
 			newQuantity = thisProduct.quantity + product.quantity;
 
-			// Update product in database
 			productKey = thisProduct.id;
 		}
 
+		// Update product in database
 		update(ref(database, `/products/${productKey}`), {
 			quantity: newQuantity,
 			prices: thisProduct?.prices,
@@ -117,9 +121,6 @@ const AddStock: React.FC = () => {
 		// Alert user of success
 		alert('New stock added!');
 	};
-
-	console.log(quantityHasError);
-	console.log(priceHasError);
 
 	// Set input classes
 	const quantityInputClasses = quantityHasError

@@ -6,7 +6,7 @@ import EmailContext from '../store/email-context';
 import useInput from '../hooks/useInput';
 import Dropdown from '../UI/Dropdown';
 import classes from './RemoveStock.module.css';
-import Product from '../interfaces/product';
+import Product from '../types/product';
 
 const RemoveStock: React.FC = () => {
 	// Extract context values

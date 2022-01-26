@@ -26,3 +26,27 @@ ul {
 	padding: 1rem 0;
 	border-radius: 5px;
 }
+
+@media only screen and (max-width: 1240px) {
+	.display {
+		width: 50vw;
+	}
+}
+
+@media only screen and (max-width: 1024px) {
+	.display {
+		width: 60vw;
+	}
+}
+
+@media only screen and (max-width: 768px) {
+	.display {
+		width: 70vw;
+	}
+}
+
+@media only screen and (max-width: 600px) {
+	.display {
+		width: 85vw;
+	}
+}
